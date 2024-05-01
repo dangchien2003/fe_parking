@@ -1,0 +1,53 @@
+header
+	Bên phải header
+		Logo
+	Bên trái header
+		menu (drop down)
+			Ví tiền
+			{
+				Nạp tiền
+				Lịch sử nạp tiền
+			}
+			Mã Code
+			{
+				Mua code
+				Lịch sử mua code
+			}
+		Số dư(| :số tiền |)
+		Ảnh(Hình vuông)(Click)
+			Thông tin tài khoản
+			Đăng xuất
+
+
+dashboard
+	thông báo chạy
+	header
+	body
+		Tên trang: Dashboard
+		Thống kê số lượng qr đã mua
+			Tittle(Qr đã mua) (bên trái)
+			Xem tất cả(bên phải)
+			Khung border
+			{
+				Số lượng(Bên trái)
+				Số tiền đã mua(Bên phải)
+				Danh sách mã qr(sắp xếp theo thời gian mua _ 10 mã mới nhất)
+					Thời gian mua
+					Thời gian vào
+					Thời gian ra
+					Trạng thái(Chờ, Vào, Kết Thúc)
+					Xem chi tiết
+			}
+		Thống kê lịch sử nạp tiền 
+			Tittle(Qr đã mua) (bên trái)
+			Xem tất cả(bên phải)
+			Khung border
+			{
+				Số tiền hiện có
+				Danh sách các lần nạp Tiền(Sắp xếp theo stt _ 10 lệnh mới nhất)
+					Thời gian nạp
+					Số Tiền số tiền
+					Trạng thái(Chờ, OK, Huỷ)
+					Xem chi tiết
+			}
+	footer
