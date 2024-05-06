@@ -46,7 +46,7 @@ function Login() {
           })
           .then((data) => {
             if (data.success === false) {
-              let errorMessage = "Lỗi không xác định";
+              let errorMessage = "";
               switch (data.message.error) {
                 case "Incorrect password":
                   errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
@@ -54,6 +54,8 @@ function Login() {
                 case "Email not exist":
                   errorMessage = "Email không tồn tại";
                   break;
+                default:
+                  errorMessage = "Lỗi không xác định";
               }
               if (!!data.message.password) {
                 errorMessage = data.message.password;
