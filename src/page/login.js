@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
+import { LoadingCircle } from "../components/loading";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,12 +10,30 @@ function Login() {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [countLogin, setCountLogin] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [heightPage, setHeightPage] = useState(window.innerHeight);
+  const [heightForm, setHeightForm] = useState(0);
+  useEffect(() => {
+    setHeightForm(document.getElementById("form").offsetHeight);
+    console.log("form" + heightForm);
+  }, [heightForm]);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setHeightPage(window.innerHeight);
+    });
+    return window.removeEventListener("resize", () => {
+      setHeightPage(window.innerHeight);
+    });
+  }, [heightPage]);
+
   useEffect(() => {
     const run = async () => {
       if (countLogin > 0 && !errorEmail && !errorPassword) {
+        setLoading(true);
         let host = process.env.REACT_APP_BE;
         // host = "https://parking.com:8080";
-        await fetch(`${host}/customer/login`, {
+        fetch(`${host}/customer/login`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -23,6 +42,7 @@ function Login() {
           body: JSON.stringify({ email: email, password: password }),
         })
           .then((response) => {
+            setLoading(false);
             return response.json();
           })
           .then((data) => {
@@ -52,7 +72,6 @@ function Login() {
           });
       }
     };
-
     run();
   }, [countLogin]);
 
@@ -81,13 +100,15 @@ function Login() {
   const handleChangeRemember = () => {
     setRemember(!remember);
   };
-
+  const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "700px" }}
-    >
-      <div className="form-login">
+    <div className="d-flex justify-content-center align-items-center">
+      <div
+        className="form-login"
+        style={{
+          marginTop: margin > 0 && margin + "px",
+        }}
+      >
         <div className="logo">
           <div>
             <img
@@ -118,7 +139,7 @@ function Login() {
             </Link>
           </div>
         </div>
-        <form>
+        <form id="form">
           <div className="d-block group-input">
             <label>Email</label>
             <br />
@@ -162,6 +183,7 @@ function Login() {
             Đăng nhập
           </button>
         </form>
+        {loading && <LoadingCircle width="50px" />}
       </div>
     </div>
   );
