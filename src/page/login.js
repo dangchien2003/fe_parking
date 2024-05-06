@@ -32,7 +32,6 @@ function Login() {
       if (countLogin > 0 && !errorEmail && !errorPassword) {
         setLoading(true);
         let host = process.env.REACT_APP_BE;
-        // host = "https://parking.com:8080";
         fetch(`${host}/customer/login`, {
           method: "POST",
           credentials: "include",
@@ -112,7 +111,7 @@ function Login() {
         <div className="logo">
           <div>
             <img
-              src={`${process.env.REACT_APP_HOST}/logo.png`}
+              src={`${process.env.REACT_APP_HOST}/img/logo.png`}
               className="size-logo"
               alt="logo"
             />
