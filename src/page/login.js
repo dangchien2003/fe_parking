@@ -15,16 +15,14 @@ function Login() {
   const [heightForm, setHeightForm] = useState(0);
   useEffect(() => {
     setHeightForm(document.getElementById("form").offsetHeight);
-    console.log("form" + heightForm);
   }, [heightForm]);
 
   useEffect(() => {
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       setHeightPage(window.innerHeight);
-    });
-    return window.removeEventListener("resize", () => {
-      setHeightPage(window.innerHeight);
-    });
+    };
+    window.addEventListener("resize", handleResize);
+    return window.removeEventListener("resize", handleResize);
   }, [heightPage]);
 
   useEffect(() => {
