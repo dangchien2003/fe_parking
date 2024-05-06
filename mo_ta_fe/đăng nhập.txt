@@ -1,0 +1,11 @@
+khung đăng nhập
+    logo trên cùng
+    chữ: (Chữ đen)Tôi quên mật khẩu | Đăng ký thành viên(Chữ xanh lam)
+    ô nhập
+        label: Email | Mật khẩu
+        input: 
+            chỉ có border bottom
+        nút đăng nhập
+            Nền màu xanh lam
+        
+
