@@ -22,7 +22,9 @@ function Login() {
       setHeightPage(window.innerHeight);
     };
     window.addEventListener("resize", handleResize);
-    return window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [heightPage]);
 
   useEffect(() => {
