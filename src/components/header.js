@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Notify from "./notify";
 import InfoAccount from "./info-account";
 import authen from "../valid/authen";
@@ -8,13 +7,11 @@ let myHost = process.env.REACT_APP_HOST;
 myHost = "http://192.168.1.11:3000";
 
 function Header() {
-  useEffect(() => {
-    authen();
-  }, []);
-
   const [toggle, SetToggle] = useState({ left: 0 });
   const [pageLogin, setPageLogin] = useState(isPageLogin());
-
+  useEffect(() => {
+    authen();
+  }, [pageLogin]);
   const handleResize = () => {
     if (window.innerWidth > 550) {
       SetToggle({ left: 199 });

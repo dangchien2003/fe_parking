@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading";
-
+import { delToken, getCookie } from "../helper/cookie";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +13,13 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
+
+  useEffect(() => {
+    if (getCookie("logout") == "true") {
+      delToken("customer");
+    }
+  }, []);
+
   useEffect(() => {
     setHeightForm(document.getElementById("form").offsetHeight);
   }, [heightForm]);

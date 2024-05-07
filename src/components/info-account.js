@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { formatMoney } from "../helper/number";
 let myHost = process.env.REACT_APP_HOST;
-myHost = "http://192.168.1.11:3000";
+
 function InfoAccount() {
   const [remaining, setRemaining] = useState(formatMoney(0));
-
   useEffect(() => {
     const hostBE = process.env.REACT_APP_BE;
     const handleRemaining = () => {
@@ -24,6 +24,10 @@ function InfoAccount() {
     };
     handleRemaining();
   }, []);
+  const handleLogout = () => {
+    document.cookie = "logout=true;Max-Age=10;path=/";
+    console.log("object");
+  };
   return (
     <div className="info-account">
       <div className="money">
@@ -50,9 +54,13 @@ function InfoAccount() {
               <hr className="dropdown-divider" />
             </li>
             <li>
-              <a className="dropdown-item text-white" href="#">
+              <Link
+                to={`${myHost}/login`}
+                onClick={handleLogout}
+                className="dropdown-item text-white"
+              >
                 Đăng xuất
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

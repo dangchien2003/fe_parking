@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Header from "../components/header";
 
 function Dashboard() {
@@ -24,7 +23,7 @@ function Dashboard() {
                       Tổng chi: 120.000<sup>đ</sup>
                     </div>
                   </div>
-                  <table class="table table-hover">
+                  <table className="table table-hover">
                     <thead>
                       <tr>
                         <th scope="col">Thời gian mua</th>
@@ -102,7 +101,7 @@ function Dashboard() {
                       Số dư: 120.000<sup>đ</sup>
                     </div>
                   </div>
-                  <table class="table table-hover">
+                  <table className="table table-hover">
                     <thead>
                       <tr>
                         <th scope="col">Thời gian nạp</th>
