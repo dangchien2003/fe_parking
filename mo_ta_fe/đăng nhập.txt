@@ -5,7 +5,8 @@ khung đăng nhập
         label: Email | Mật khẩu
         input: 
             chỉ có border bottom
-        nút đăng nhập
-            Nền màu xanh lam
+        checkbox Nhớ mật khẩu
+    nút đăng nhập
+        Nền màu xanh lam
         
 

@@ -65,7 +65,7 @@ function Login() {
               }
               setErrorPassword(errorMessage);
             } else {
-              window.location.href = `${process.env.REACT_APP_HOST}/dashboard`;
+              window.location.href = `${process.env.REACT_APP_HOST}/`;
             }
           })
           .catch(() => {

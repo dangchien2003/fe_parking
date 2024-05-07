@@ -1,0 +1,19 @@
+header
+	Bên phải header
+		Logo
+	Bên trái header
+		menu (drop down)
+			Ví tiền
+			{
+				Nạp tiền
+				Lịch sử nạp tiền
+			}
+			Mã Code
+			{
+				Mua code
+				Lịch sử mua code
+			}
+		Số dư(| :số tiền |)
+		Ảnh(Hình vuông)(Click)
+			Thông tin tài khoản
+			Đăng xuất
