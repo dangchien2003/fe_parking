@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Briem+Hand:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Freeman&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+
+
+body {
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.name {
+    font-family: "Freeman", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 2px;
+    padding-bottom: 10px;
+}
+
+.form-login {
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    padding: 50px;
+    box-shadow: 0px 0px 10px rgb(182, 180, 180);
+}
+
+.logo {
+    text-align: center;
+}
+
+.size-logo {
+    max-width: 70px;
+}
+
+.logo-text {
+    font-family: "Briem Hand", cursive;
+    font-size: 30px;
+}
+
+.forget:hover, .create-account:hover{
+    color: black;
+
+}
+
+.action-account > div{
+    display: inline-block;
+}
+
+.input {
+    border: none;
+    outline: none;
+}
+
+.input-1 {
+    background-color: rgb(243, 243, 243);
+    border-radius: 10px;
+    width: 100%;
+    height: 40px;
+    padding: 10px 15px;
+}
+
+.group-input {
+    padding: 5px 0;
+}
+
+.group-input label {
+    padding: 5px 0;
+    font-weight: 500;
+}
+
+
+/* header  */
+
+.bg-header {
+    background-color: #395063;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+header .nav-bar {
+    color: white;
+    display: flex;
+    line-height: 70px;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+}
+
+nav .toggle {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    background-color: #395063;
+    position: absolute;
+    z-index: 1000;
+    left: 1px;
+    border: 1px solid #202d38;
+    border-left: none;
+    display: none;
+    text-align: center;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    border-radius: 0 5px 5px 0;
+}
+
+nav .parent  {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+header nav .object {
+    display: none;
+}
+
+nav .parent li {
+    width: 110px;
+    padding: 0 5px;
+    
+}
+
+
+header .info-account {
+    border-left: 2px solid rgb(39, 39, 39);
+    padding: 0 20px;
+    display: flex;
+}
+header .info-account .money {
+    white-space: nowrap;
+}
+
+header .info-account .dropdown-menu {
+    transition: all 0.3s ease;
+    background-color: #395063;
+}
+
+header .info-account .dropdown-menu li a:hover {
+    background-color: #436c8d ;
+}
+
+header .info-account img{
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgb(37, 37, 37);
+    margin-left: 10px;
+}
+
+header .info-account .dropdown-menu {
+    line-height: 30px;
+}
+
+.btn-group {
+    outline: none;
+    border: none;
+}
+
+header .info-account .btn {
+    border: none !important;
+}
+
+
+/* dashboard  */
+.dashboard {
+    padding: 0 20px;
+}
+
+.dashboard .tk {
+    border: 1px solid ;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.dashboard table {
+    display: block;
+    overflow: auto;
+    height: 400px;
+}
+
+.dashboard table th {
+    width: 1000px !important;
+}
