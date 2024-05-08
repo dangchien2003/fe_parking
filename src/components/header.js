@@ -4,7 +4,6 @@ import InfoAccount from "./info-account";
 import authen from "../valid/authen";
 import { isPageLogin } from "../helper/url";
 let myHost = process.env.REACT_APP_HOST;
-myHost = "http://192.168.1.11:3000";
 
 function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });

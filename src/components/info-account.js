@@ -1,32 +1,22 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../helper/number";
+import { callRemaining } from "../helper/remaing";
 let myHost = process.env.REACT_APP_HOST;
-
 function InfoAccount() {
-  const [remaining, setRemaining] = useState(formatMoney(0));
+  const [remaining, setRemaining] = useState(0);
+
   useEffect(() => {
-    const hostBE = process.env.REACT_APP_BE;
-    const handleRemaining = () => {
-      fetch(`${hostBE}/customer/cash/remaining`, {
-        method: "GET",
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((dataRes) => {
-          if (dataRes.success == true) {
-            setRemaining(formatMoney(dataRes.data.remaining));
-          }
-        })
-        .catch((error) => {
-          setRemaining("null");
-        });
+    const data = async () => {
+      const data = await callRemaining();
+      setRemaining(formatMoney(data));
+      document.cookie = `remaining=${data};3600;Path=/`;
     };
-    handleRemaining();
+    data();
   }, []);
+
   const handleLogout = () => {
     document.cookie = "logout=true;Max-Age=10;path=/";
-    console.log("object");
   };
   return (
     <div className="info-account">
