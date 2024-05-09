@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
-import { LoadingCircle } from "../components/loading";
+import { LoadingCircle } from "../components/loading/loading-circle";
 import { delToken, getCookie } from "../helper/cookie";
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,9 +13,10 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
+  const [typePasword, setTypePasword] = useState("password");
 
   useEffect(() => {
-    if (getCookie("logout") == "true") {
+    if (getCookie("logout") === "true") {
       delToken("customer");
     }
   }, []);
@@ -45,7 +46,11 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: email, password: password }),
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            memorize: remember,
+          }),
         })
           .then((response) => {
             setLoading(false);
@@ -89,6 +94,7 @@ function Login() {
     } else {
       setErrorEmail("");
     }
+    console.log(password);
     if (!password.length > 0) {
       setErrorPassword("Nhập mật khẩu");
     } else {
@@ -98,6 +104,7 @@ function Login() {
   };
 
   const handleChangeEmail = (e) => {
+    console.log(e.target.value);
     setEmail(e.target.value);
   };
 
@@ -108,6 +115,23 @@ function Login() {
   const handleChangeRemember = () => {
     setRemember(!remember);
   };
+
+  const handleClickEye = () => {
+    if (typePasword === "password") {
+      setTypePasword("text");
+      handleChangeTypePassword();
+    } else {
+      setTypePasword("password");
+    }
+  };
+
+  const handleChangeTypePassword = () => {
+    const idTimeOut = setTimeout(() => {
+      setTypePasword("password");
+      clearTimeout(idTimeOut);
+    }, 3000);
+  };
+
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -165,12 +189,21 @@ function Login() {
           <div className="d-block group-input">
             <label>Mật khẩu</label>
             <br />
-            <input
-              type="text"
-              className="input input-1"
-              value={password}
-              onChange={handleChangePassword}
-            />
+            <div id="password">
+              <input
+                type={typePasword}
+                className="input input-1"
+                value={password}
+                onChange={handleChangePassword}
+              />
+              <div className="eye" onClick={handleClickEye}>
+                {typePasword === "password" ? (
+                  <i className="bi bi-eye-slash"></i>
+                ) : (
+                  <i className="bi bi-eye-fill"></i>
+                )}
+              </div>
+            </div>
             {errorPassword && (
               <div className="text-danger">{errorPassword}</div>
             )}

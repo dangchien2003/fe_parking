@@ -1,5 +1,5 @@
 import moment from "moment";
-function covertTimeStamp(timestamp, format) {
+function convertTimeStamp(timestamp, format) {
   let date = "";
   if (!isNaN(timestamp)) {
     date = moment(timestamp).format(format);
@@ -9,4 +9,4 @@ function covertTimeStamp(timestamp, format) {
   return date;
 }
 
-export { covertTimeStamp };
+export { convertTimeStamp };

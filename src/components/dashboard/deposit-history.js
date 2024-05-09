@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { formatMoney } from "../../helper/number";
 import RenderReposit from "./render-list-deposit";
+import LoadingLineRun from "../loading/loading-line-run";
 function HistoryDeposit() {
   const [history, setHistory] = useState([]);
+  const [loaded, setLoading] = useState(false);
   const [totalDeposited, setTotalDeposited] = useState(formatMoney(0));
   useEffect(() => {
     const callHistory = async () => {
@@ -20,6 +22,7 @@ function HistoryDeposit() {
         .catch((error) => {
           console.log(error);
         });
+      setLoading(true);
     };
     callHistory();
   }, []);
@@ -59,7 +62,7 @@ function HistoryDeposit() {
                 <th scope="col">Trạng thái</th>
               </tr>
             </thead>
-            {history.length > 0 && <RenderReposit list={history} />}
+            {loaded ? <RenderReposit list={history} /> : <LoadingLineRun />}
           </table>
         </div>
       </div>
