@@ -9,10 +9,12 @@ async function authen() {
 
     const dataRes = await response.json();
     if (!dataRes || dataRes.success !== true) {
-      window.location.href = `/login`;
+      // window.location.href = `${myHost}/login`;
+      console.log(`${myHost}/login`);
     }
   } catch (error) {
-    window.location.href = `/login`;
+    // window.location.href = `${myHost}/login`;
+    console.log(`${myHost}/login`);
   }
 }
 export default authen;
