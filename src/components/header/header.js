@@ -3,9 +3,9 @@ import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
 import { isPageLogin } from "../../helper/url";
-let myHost = process.env.REACT_APP_HOST;
 
 function Header() {
+  let myHost = process.env.REACT_APP_HOST;
   const [toggle, SetToggle] = useState({ left: 0 });
   const [pageLogin, setPageLogin] = useState(isPageLogin());
   useEffect(() => {

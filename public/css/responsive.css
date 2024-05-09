@@ -5,11 +5,21 @@
 }
 
 @media (max-width: 550px) {
+
+    header .bg-header .size-logo {
+        max-width: 55px;
+    }
+
+    header .bg-header .logo-text {
+        font-size: 25px;
+    }
+
     header nav {
         position: absolute;
         left: 0;
         top: 81px;
         z-index: 999;
+        width: 0;
     }
 
     header nav ul {

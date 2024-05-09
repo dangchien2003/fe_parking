@@ -12,7 +12,7 @@ async function callRemaining() {
     }
   } catch (error) {
     console.log("error call " + error);
-    return null;
+    return 0;
   }
 }
 

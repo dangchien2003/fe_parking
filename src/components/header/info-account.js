@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
 import { callRemaining } from "../../helper/remaing";
-let myHost = process.env.REACT_APP_HOST;
 function InfoAccount() {
+  let myHost = process.env.REACT_APP_HOST;
   const [remaining, setRemaining] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function InfoAccount() {
         <div className="btn-group">
           <div
             type="button"
-            className="btn dropdown-toggle"
+            className="btn dropdown-toggle "
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
