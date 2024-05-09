@@ -94,7 +94,6 @@ function Login() {
     } else {
       setErrorEmail("");
     }
-    console.log(password);
     if (!password.length > 0) {
       setErrorPassword("Nhập mật khẩu");
     } else {
@@ -104,7 +103,6 @@ function Login() {
   };
 
   const handleChangeEmail = (e) => {
-    console.log(e.target.value);
     setEmail(e.target.value);
   };
 
