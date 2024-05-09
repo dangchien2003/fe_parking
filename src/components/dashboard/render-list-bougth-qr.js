@@ -15,7 +15,7 @@ function RenderListBougthQr({ list }) {
     <tbody>
       {list.map((element) => {
         return (
-          <tr>
+          <tr key={Math.random()}>
             <td>
               {convertTimeStamp(element.buyAt, "hh:mm:ss")}
               <br />
