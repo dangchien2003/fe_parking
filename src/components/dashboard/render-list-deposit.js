@@ -1,4 +1,4 @@
-import { covertTimeStamp } from "../../helper/time";
+import { convertTimeStamp } from "../../helper/time";
 import { formatMoney } from "../../helper/number";
 function RenderReposit({ list }) {
   const handleStatus = (element) => {
@@ -19,9 +19,9 @@ function RenderReposit({ list }) {
       {list.map((element, index) => (
         <tr key={index}>
           <td>
-            {covertTimeStamp(element.cashAt, "hh:mm:ss")}
+            {convertTimeStamp(element.cashAt, "hh:mm:ss")}
             <br />
-            {covertTimeStamp(element.cashAt, "DD/MM/yyyy")}
+            {convertTimeStamp(element.cashAt, "DD/MM/yyyy")}
           </td>
           <td>{formatMoney(element.money)}</td>
           <td>{handleStatus(element)}</td>

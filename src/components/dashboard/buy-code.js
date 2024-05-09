@@ -1,13 +1,30 @@
 import { useState, useEffect } from "react";
 import { formatMoney } from "../../helper/number";
+import RenderListBougthQr from "./render-list-bougth-qr";
+import LoadingLineRun from "../loading/loading-line-run";
 function HistoryBuyCode() {
   const [quantityBought, setQuantityBought] = useState(0);
+
   const [totalInvested, setTotalInvested] = useState(formatMoney(0));
-  const [loadHistory, setLoadHistory] = useState(false);
+
+  const [loaded, setLoaded] = useState(false);
+
+  const [history, setHistory] = useState([]);
+
   useEffect(() => {
     // const loadQuantityBought = async () => {
     //   await fetch(`${process.env.BE}/`);
     // };
+    setTimeout(() => {
+      setHistory([
+        {
+          buyAt: 1712484956356,
+          checkinAt: 1712484956356,
+          checkoutAt: null,
+        },
+      ]);
+      setLoaded(true);
+    }, 3000);
   }, []);
   return (
     <div className="d-flex justify-content-center tk">
@@ -36,113 +53,11 @@ function HistoryBuyCode() {
                 <th scope="col">Xem</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>Kết thúc</td>
-                <td>
-                  <a href="#">Xem chi tiết</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>Kết thúc</td>
-                <td>
-                  <a href="#">Xem chi tiết</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>Kết thúc</td>
-                <td>
-                  <a href="#">Xem chi tiết</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>Kết thúc</td>
-                <td>
-                  <a href="#">Xem chi tiết</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>
-                  11:11:11
-                  <br />
-                  26/01/2003
-                </td>
-                <td>Kết thúc</td>
-                <td>
-                  <a href="#">Xem chi tiết</a>
-                </td>
-              </tr>
-            </tbody>
+            {loaded ? (
+              <RenderListBougthQr list={history} />
+            ) : (
+              <LoadingLineRun />
+            )}
           </table>
         </div>
       </div>
