@@ -77,7 +77,7 @@ function Login() {
               }
               setErrorPassword(errorMessage);
             } else {
-              window.location.href = `${process.env.REACT_APP_HOST}/`;
+              window.location.href = "/";
             }
           })
           .catch(() => {
@@ -143,11 +143,7 @@ function Login() {
       >
         <div className="logo">
           <div>
-            <img
-              src={`${process.env.REACT_APP_HOST}/img/logo.png`}
-              className="size-logo"
-              alt="logo"
-            />
+            <img src={`/img/logo.png`} className="size-logo" alt="logo" />
             <span className="logo-text">arking</span>
           </div>
         </div>
