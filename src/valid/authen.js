@@ -1,6 +1,5 @@
 async function authen() {
   const hostBe = process.env.REACT_APP_BE;
-  const myHost = process.env.REACT_APP_HOST;
   try {
     const response = await fetch(`${hostBe}/customer/authentication`, {
       method: "POST",
@@ -9,10 +8,10 @@ async function authen() {
 
     const dataRes = await response.json();
     if (!dataRes || dataRes.success !== true) {
-      window.location.href = `${myHost}/login`;
+      window.location.href = `/login`;
     }
   } catch (error) {
-    window.location.href = `${myHost}/login`;
+    window.location.href = `/login`;
   }
 }
 export default authen;
