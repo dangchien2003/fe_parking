@@ -1,0 +1,4 @@
+Created a new certificate valid for the following names 📜
+ - "feparking.com"
+ - "*.feparking.com"
+ - "localhost"
