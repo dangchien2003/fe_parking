@@ -1,4 +1,4 @@
-import Header from "../components/header";
+import Header from "../components/header/header";
 import HistoryBuyCode from "../components/dashboard/buy-code";
 import HistoryDeposit from "../components/dashboard/deposit-history";
 function Dashboard() {

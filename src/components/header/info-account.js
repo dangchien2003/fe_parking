@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { formatMoney } from "../helper/number";
-import { callRemaining } from "../helper/remaing";
+import { formatMoney } from "../../helper/number";
+import { callRemaining } from "../../helper/remaing";
 let myHost = process.env.REACT_APP_HOST;
 function InfoAccount() {
   const [remaining, setRemaining] = useState(0);

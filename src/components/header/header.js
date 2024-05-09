@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Notify from "./notify";
+import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
-import authen from "../valid/authen";
-import { isPageLogin } from "../helper/url";
+import authen from "../../valid/authen";
+import { isPageLogin } from "../../helper/url";
 let myHost = process.env.REACT_APP_HOST;
 
 function Header() {
@@ -25,7 +25,7 @@ function Header() {
   }, []);
 
   const handleToggle = () => {
-    if (toggle.left != 0) {
+    if (toggle.left !== 0) {
       SetToggle({ left: 0 });
     } else {
       SetToggle({ left: 199 });
@@ -54,7 +54,7 @@ function Header() {
             >
               <i className="bi bi-chevron-double-left"></i>
             </div>
-            <ul className={toggle.left == 0 ? "hide parent" : "show parent"}>
+            <ul className={toggle.left === 0 ? "hide parent" : "show parent"}>
               <li className="object">Ví tiền</li>
               <ul className="sub-menu">
                 <li>Nạp tiền</li>
