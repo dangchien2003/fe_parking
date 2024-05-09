@@ -5,7 +5,6 @@ import authen from "../../valid/authen";
 import { isPageLogin } from "../../helper/url";
 
 function Header() {
-  let myHost = process.env.REACT_APP_HOST;
   const [toggle, SetToggle] = useState({ left: 0 });
   const [pageLogin, setPageLogin] = useState(isPageLogin());
   useEffect(() => {
@@ -35,13 +34,9 @@ function Header() {
   return (
     <header>
       <div className="bg-header">
-        <a href={`${myHost}/`} className="text-decoration-none">
+        <a href={`/`} className="text-decoration-none">
           <div>
-            <img
-              src={`${myHost}/img/logo.png`}
-              className="size-logo"
-              alt="logo"
-            />
+            <img src={`/img/logo.png`} className="size-logo" alt="logo" />
             <span className="logo-text text-white">arking</span>
           </div>
         </a>

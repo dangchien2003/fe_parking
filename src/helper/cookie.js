@@ -23,10 +23,10 @@ function delToken(person) {
   let api;
   switch (person.toLowerCase()) {
     case "staff":
-      api = `${process.env.REACT_APP_HOST}/staff/logout`;
+      api = `${process.env.REACT_APP_BE}/staff/logout`;
       break;
     case "customer":
-      api = `${process.env.REACT_APP_HOST}/customer/logout`;
+      api = `${process.env.REACT_APP_BE}/customer/logout`;
       break;
     default:
       error = true;

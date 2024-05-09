@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
 import { callRemaining } from "../../helper/remaing";
 function InfoAccount() {
-  let myHost = process.env.REACT_APP_HOST;
   const [remaining, setRemaining] = useState(0);
 
   useEffect(() => {
@@ -32,7 +31,7 @@ function InfoAccount() {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img src={`${myHost}/img/avt.jpg`} alt="avatar" />
+            <img src={`/img/avt.jpg`} alt="avatar" />
           </div>
           <ul className="dropdown-menu">
             <li>
@@ -45,7 +44,7 @@ function InfoAccount() {
             </li>
             <li>
               <Link
-                to={`${myHost}/login`}
+                to={`/login`}
                 onClick={handleLogout}
                 className="dropdown-item text-white"
               >
