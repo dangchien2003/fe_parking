@@ -9,7 +9,6 @@ function InfoAccount() {
     const data = async () => {
       const data = await callRemaining();
       setRemaining(formatMoney(data));
-      document.cookie = `remaining=${data};3600;Path=/`;
     };
     data();
   }, []);

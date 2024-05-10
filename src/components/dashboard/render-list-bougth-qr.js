@@ -1,8 +1,13 @@
-import { convertTimeStamp } from "../../helper/time";
+import { convertTimeStamp, getNowTimestamp } from "../../helper/time";
 function RenderListBougthQr({ list }) {
+  const now = getNowTimestamp();
   const handleStatus = (element) => {
     let status = "";
-    if (element.checkoutAt) {
+    if (
+      element.checkoutAt ||
+      element.cancleAt !== null ||
+      element.expireAt < now
+    ) {
       status = "Kết thúc";
     } else if (element.checkinAt) {
       status = "Vào";

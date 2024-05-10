@@ -9,4 +9,9 @@ function convertTimeStamp(timestamp, format) {
   return date;
 }
 
-export { convertTimeStamp };
+function getNowTimestamp() {
+  const date = new Date();
+  return date.getTime();
+}
+
+export { convertTimeStamp, getNowTimestamp };
