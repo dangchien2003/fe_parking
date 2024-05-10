@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { formatMoney } from "../../helper/number";
 import RenderListBougthQr from "./render-list-bougth-qr";
 import LoadingLineRun from "../loading/loading-line-run";
+import { getNowTimestamp } from "../../helper/time";
+
 function HistoryBuyCode() {
   const [quantityBought, setQuantityBought] = useState(0);
 
@@ -12,20 +14,55 @@ function HistoryBuyCode() {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    // const loadQuantityBought = async () => {
-    //   await fetch(`${process.env.BE}/`);
-    // };
-    setTimeout(() => {
-      setHistory([
-        {
-          buyAt: 1712484956356,
-          checkinAt: 1712484956356,
-          checkoutAt: null,
-        },
-      ]);
-      setLoaded(true);
-    }, 3000);
+    const loadQuantityBought = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BE}/customer/code/bought`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const dataRes = await response.json();
+          if (dataRes.success) {
+            setHistory(dataRes.data);
+            setQuantityBought(dataRes.data.length);
+          }
+          setLoaded(true);
+        }
+      } catch (error) {
+        setLoaded(true);
+      }
+    };
+    loadQuantityBought();
   }, []);
+
+  useEffect(() => {
+    if (loaded === true) {
+      let calculaterTotalSpent = 0;
+      const now = getNowTimestamp();
+
+      history.map((element) => {
+        if (
+          !(
+            element.cancleAt !== null ||
+            (element.expireAt < now &&
+              element.checkinAt === null &&
+              element.checkoutAt === null)
+          )
+        ) {
+          calculaterTotalSpent += element.price;
+        }
+      });
+
+      if (history.length > 0) {
+        setTotalInvested(formatMoney(calculaterTotalSpent));
+      }
+    }
+  }, [loaded]);
+
   return (
     <div className="d-flex justify-content-center tk">
       <div className="row w-100 ">
