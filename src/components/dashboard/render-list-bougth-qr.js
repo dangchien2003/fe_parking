@@ -24,14 +24,14 @@ function RenderListBougthQr({ list }) {
             <td>
               {convertTimeStamp(element.buyAt, "hh:mm:ss")}
               <br />
-              {convertTimeStamp(element.buyAt, "DD:MM:yyy")}
+              {convertTimeStamp(element.buyAt, "DD/MM/yyy")}
             </td>
             <td>
               {element.checkinAt && (
                 <>
                   {convertTimeStamp(element.checkinAt, "hh:mm:ss")}
                   <br />
-                  {convertTimeStamp(element.checkinAt, "DD:MM:yyy")}
+                  {convertTimeStamp(element.checkinAt, "DD/MM/yyy")}
                 </>
               )}
             </td>
@@ -40,7 +40,7 @@ function RenderListBougthQr({ list }) {
                 <>
                   {convertTimeStamp(element.checkoutAt, "hh:mm:ss")}
                   <br />
-                  {convertTimeStamp(element.checkoutAt, "DD:MM:yyy")}
+                  {convertTimeStamp(element.checkoutAt, "DD/MM/yyy")}
                 </>
               )}
             </td>
