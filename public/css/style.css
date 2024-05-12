@@ -8,6 +8,7 @@ body {
     box-sizing: border-box;
 }
 
+
 .name {
     font-family: "Freeman", sans-serif;
     font-weight: 400;
@@ -205,4 +206,47 @@ header .info-account .btn {
 table thead {
     position: sticky;
     top: 0;
+}
+
+
+/* register */
+.form-register .login  {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: rgb(0, 0, 0);
+    font-size: 22px;
+    text-align: right;
+    padding: 5px 10px;
+}
+
+.form-register .login:hover {
+    color: green;
+}
+
+.form-register .detail-icon {
+    position: absolute;
+    top: -20px;
+    right: 5px;
+    white-space: nowrap;
+    font-size: 15px;
+    padding: 3px;
+    box-shadow: 0px 0px 10px rgb(182, 180, 180);
+    border-radius: 5px;
+    display: none;
+    color: white;
+    background-color: #75b798;
+    padding: 3px 5px;
+}
+.form-register .detail-icon::after {
+    width: 10px;
+    height: 10px;
+    background-color: #395063;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.form-register .login:hover .detail-icon{
+    display: inline-block;
 }

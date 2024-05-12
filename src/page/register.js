@@ -2,25 +2,20 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
-import { delToken, getCookie } from "../helper/cookie";
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-  const [countLogin, setCountLogin] = useState(0);
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+  const [countRegister, setCountRegister] = useState(0);
   const [loading, setLoading] = useState(false);
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
   const [typePasword, setTypePasword] = useState("password");
-
-  useEffect(() => {
-    if (getCookie("logout") === "true") {
-      delToken("customer");
-    }
-  }, []);
 
   useEffect(() => {
     setHeightForm(document.getElementById("form").offsetHeight);
@@ -38,10 +33,15 @@ function Login() {
 
   useEffect(() => {
     const run = async () => {
-      if (countLogin > 0 && !errorEmail && !errorPassword) {
+      if (
+        countRegister > 0 &&
+        !errorEmail &&
+        !errorPassword &&
+        !errorConfirmPassword
+      ) {
         setLoading(true);
         let host = process.env.REACT_APP_BE;
-        fetch(`${host}/customer/login`, {
+        fetch(`${host}/customer/register`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -50,7 +50,6 @@ function Login() {
           body: JSON.stringify({
             email: email,
             password: password,
-            memorize: remember,
           }),
         })
           .then((response) => {
@@ -61,11 +60,14 @@ function Login() {
             if (data.success === false) {
               let errorMessage = "";
               switch (data.message.error) {
-                case "Incorrect password":
-                  errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
+                case "Email already exist":
+                  errorMessage = "Tài khoản email đã tồn tại";
                   break;
-                case "Email not exist":
-                  errorMessage = "Email không tồn tại";
+                case "must be a well-formed email address":
+                  errorMessage = "Email nhập không đúng";
+                  break;
+                case "size must be between 8 and 30":
+                  errorMessage = "Mật khẩu quá ngắn";
                   break;
                 default:
                   errorMessage = "Lỗi không xác định";
@@ -76,31 +78,38 @@ function Login() {
               if (!!data.message.email) {
                 errorMessage = data.message.email;
               }
-              setErrorPassword(errorMessage);
+              setErrorConfirmPassword(errorMessage);
             } else {
-              window.location.href = "/";
+              setRegisterSuccess(true);
             }
           })
           .catch(() => {
-            setErrorPassword("Yêu cầu thất bại");
+            setErrorConfirmPassword("Yêu cầu thất bại");
           });
       }
     };
     run();
-  }, [countLogin]);
+  }, [countRegister]);
 
-  const handleLogin = () => {
+  const handleRegister = () => {
     if (!isEmail(email)) {
       setErrorEmail("Email không hợp lệ");
     } else {
       setErrorEmail("");
     }
-    if (!password.length > 0) {
+    if (password.length < 8) {
       setErrorPassword("Nhập mật khẩu");
     } else {
+      if (confirmPassword !== password) {
+        console.log("object");
+        setErrorConfirmPassword("Mật khẩu không đúng");
+      } else {
+        setErrorConfirmPassword("");
+      }
       setErrorPassword("");
     }
-    setCountLogin((pre) => pre + 1);
+
+    setCountRegister((pre) => pre + 1);
   };
 
   const handleChangeEmail = (e) => {
@@ -109,10 +118,6 @@ function Login() {
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
-  };
-
-  const handleChangeRemember = () => {
-    setRemember(!remember);
   };
 
   const handleClickEye = () => {
@@ -130,12 +135,15 @@ function Login() {
       clearTimeout(idTimeOut);
     }, 3000);
   };
+  const handleChangeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
 
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
   return (
     <div className="d-flex justify-content-center align-items-center">
       <div
-        className="form-login"
+        className="form-login position-relative"
         style={{
           marginTop: margin > 0 && margin + "px",
         }}
@@ -146,27 +154,8 @@ function Login() {
             <span className="logo-text">arking</span>
           </div>
         </div>
-        <div className="fs-6 text-center action-account p-2">
-          <div>
-            <Link
-              to="/forget"
-              className="forget text-cyan-400 text-decoration-none"
-            >
-              Tôi quên mật khẩu
-            </Link>
-            <span>&nbsp;|&nbsp;</span>
-          </div>
 
-          <div className="action">
-            <Link
-              to="/register"
-              className="create-account text-decoration-none text-cyan-400"
-            >
-              Đăng ký thành viên
-            </Link>
-          </div>
-        </div>
-        <form id="form">
+        <form id="form" class="form-register ">
           <div className="d-block group-input">
             <label>Email</label>
             <br />
@@ -203,21 +192,43 @@ function Login() {
               <div className="text-danger">{errorPassword}</div>
             )}
           </div>
-          <div>
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={handleChangeRemember}
-            />
-            <span>Nhớ mật khẩu</span>
+          <div className="d-block group-input">
+            <label>Nhập lại mật khẩu</label>
+            <br />
+            <div id="password">
+              <input
+                type={typePasword}
+                className="input input-1"
+                value={confirmPassword}
+                onChange={handleChangeConfirmPassword}
+              />
+              <div className="eye" onClick={handleClickEye}>
+                {typePasword === "password" ? (
+                  <i className="bi bi-eye-slash"></i>
+                ) : (
+                  <i className="bi bi-eye-fill"></i>
+                )}
+              </div>
+            </div>
+            {errorConfirmPassword && (
+              <div className="text-danger">{errorConfirmPassword}</div>
+            )}
+            {registerSuccess && (
+              <i class="bi bi-check-lg text-success p-1">Tạo thành công</i>
+            )}
           </div>
           <button
             type="button"
-            className="btn btn-primary w-100 mt-3"
-            onClick={handleLogin}
+            className="btn btn-primary w-100 mt-3 position-relative"
+            onClick={handleRegister}
           >
-            Đăng nhập
+            Đăng ký
+            <i class="bi bi-check-lg text-success p-1"></i>
           </button>
+          <Link to="/login" className="login">
+            <i class="bi bi-box-arrow-right"></i>
+            <div class="detail-icon">Đi tới đăng nhập</div>
+          </Link>
         </form>
         {loading && <LoadingCircle width="50px" />}
       </div>
@@ -225,4 +236,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
