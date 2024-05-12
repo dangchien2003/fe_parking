@@ -30,7 +30,10 @@ function HistoryDeposit() {
   useEffect(() => {
     const total = history
       .filter(
-        (element) => element.acceptAt !== null && element.cancelAt === null
+        (element) =>
+          element.acceptAt !== null &&
+          element.cancleAt === null &&
+          element.recashAt === null
       )
       .map((element) => element.money)
       .reduce((total, money) => total + money, 0);

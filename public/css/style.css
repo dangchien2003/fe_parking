@@ -199,3 +199,10 @@ header .info-account .btn {
 .dashboard table th {
     width: 1000px !important;
 }
+
+
+/* table  */
+table thead {
+    position: sticky;
+    top: 0;
+}
