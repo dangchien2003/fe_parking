@@ -98,10 +98,9 @@ function Register() {
       setErrorEmail("");
     }
     if (password.length < 8) {
-      setErrorPassword("Nhập mật khẩu");
+      setErrorPassword("Mật khẩu lớn hơn 8 ký tự");
     } else {
       if (confirmPassword !== password) {
-        console.log("object");
         setErrorConfirmPassword("Mật khẩu không đúng");
       } else {
         setErrorConfirmPassword("");
