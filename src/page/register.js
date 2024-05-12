@@ -222,7 +222,6 @@ function Register() {
             onClick={handleRegister}
           >
             Đăng ký
-            <i class="bi bi-check-lg text-success p-1"></i>
           </button>
           <Link to="/login" className="login">
             <i class="bi bi-box-arrow-right"></i>
