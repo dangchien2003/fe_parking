@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 function AcceptForget() {
   const { token } = useParams();
@@ -8,6 +8,21 @@ function AcceptForget() {
   const [acceptOK, setAcceptOK] = useState(false);
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
+
+  useEffect(() => {
+    setHeightForm(document.getElementById("form").offsetHeight);
+  }, [heightForm]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeightPage(window.innerHeight);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [heightPage]);
+
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_BE}/customer/forget/${token}`, {
@@ -27,6 +42,9 @@ function AcceptForget() {
         } else {
           setAcceptOK(true);
         }
+      })
+      .catch((error) => {
+        setErrorAccept("Lỗi không xác định");
       });
   }, []);
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
@@ -45,13 +63,16 @@ function AcceptForget() {
           </div>
         </div>
         <form id="form">
-          {errorAccept && (
+          {/* {errorAccept && (
             <div style={{ padding: "20px", color: "red" }}>{errorAccept}</div>
-          )}
-          {acceptOK && (
+          )} */}
+          {!acceptOK && (
             <div style={{ padding: "20px", color: "#20c997" }}>
               Mật khẩu sẽ được gửi trong ít phút nữa. Vui lòng kiểm kiểm tra hòm
-              thư của bạn
+              thư của bạn.
+              <p className="text-center">
+                <Link to="/login">Quay về đăng nhập</Link>
+              </p>
             </div>
           )}
         </form>
