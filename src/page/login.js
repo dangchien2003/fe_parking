@@ -149,7 +149,7 @@ function Login() {
         <div className="fs-6 text-center action-account p-2">
           <div>
             <Link
-              to="/forget"
+              to={`/forget-password?email=${email}`}
               className="forget text-cyan-400 text-decoration-none"
             >
               Tôi quên mật khẩu
