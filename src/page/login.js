@@ -82,6 +82,7 @@ function Login() {
             }
           })
           .catch(() => {
+            setLoading(false);
             setErrorPassword("Yêu cầu thất bại");
           });
       }

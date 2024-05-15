@@ -224,8 +224,8 @@ function Register() {
             Đăng ký
           </button>
           <Link to="/login" className="login">
-            <i class="bi bi-box-arrow-right"></i>
-            <div class="detail-icon">Đi tới đăng nhập</div>
+            <i className="bi bi-box-arrow-right"></i>
+            <div className="detail-icon">Đi tới đăng nhập</div>
           </Link>
         </form>
         {loading && <LoadingCircle width="50px" />}

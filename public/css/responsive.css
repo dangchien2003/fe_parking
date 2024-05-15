@@ -61,7 +61,29 @@
     }
 
 
-    .dashboard .tk {
+    #dashboard .tk {
         margin-top: 20px;
+    }
+
+    
+    /* my info */
+
+    #my-info .account {
+        border: 1px solid black;
+        border-radius: 10px 10px 0 0;
+    }
+
+    #my-info .password {
+        border: 1px solid black;
+        border-radius: 0 0 10px 10px;
+        border-top: none;
+    }
+
+    .topic {
+        display: block;
+    }
+
+    .group-info {
+        padding: 5px 0;
     }
 }

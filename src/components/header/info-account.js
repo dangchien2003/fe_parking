@@ -34,9 +34,9 @@ function InfoAccount() {
           </div>
           <ul className="dropdown-menu">
             <li>
-              <a className="dropdown-item text-white" href="#">
+              <Link to="/me" className="dropdown-item text-white">
                 Thông tin tài khoản
-              </a>
+              </Link>
             </li>
             <li>
               <hr className="dropdown-divider" />

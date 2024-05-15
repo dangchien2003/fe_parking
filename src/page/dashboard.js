@@ -5,7 +5,7 @@ function Dashboard() {
   return (
     <div>
       <Header />
-      <div className="dashboard">
+      <div className="margin-distance" id="dashboard">
         <div className="row">
           <h3 className="name">DASHBOARD</h3>
           <div className="col-lg-6">
