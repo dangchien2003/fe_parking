@@ -4,7 +4,7 @@ import ChangePassword from "../components/me/change-password";
 import { useEffect, useState } from "react";
 import LoadingLineRun from "../components/loading/loading-line-run";
 import { convertTimeStamp } from "../helper/time";
-
+import { diffTime, formatDays } from "../helper/time";
 function MyInfo() {
   const [info, setInfo] = useState(null);
   const [errorFetch, setErrorFetch] = useState("");
@@ -91,7 +91,8 @@ function MyInfo() {
                         {convertTimeStamp(parseInt(info.createAt), "DD/MM/yyy")}
                       </span>
                       <span className="d-block ok">
-                        Chúng ta đã gắn bó được 25 ngày rồi đó
+                        Chúng ta đã gắn bó được{" "}
+                        {formatDays(diffTime(info.createAt))} rồi đó
                         <img src="/img/thanks1.png" />
                       </span>
                     </p>

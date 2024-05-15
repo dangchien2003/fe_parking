@@ -14,4 +14,26 @@ function getNowTimestamp() {
   return date.getTime();
 }
 
-export { convertTimeStamp, getNowTimestamp };
+function diffTime(timestamp) {
+  const now = moment(); // Lấy thời điểm hiện tại
+  if (!isNaN(timestamp)) {
+    try {
+      timestamp = parseInt(timestamp);
+    } catch (error) {
+      return 0;
+    }
+  }
+  const date = moment(timestamp);
+  const daysDifference = now.diff(date, "days");
+  return daysDifference;
+}
+
+function formatDays(days) {
+  if (days > 30) {
+    const month = Math.floor(days / 30);
+    return `hơn ${month} tháng`;
+  }
+  return `${days} ngày`;
+}
+
+export { convertTimeStamp, getNowTimestamp, diffTime, formatDays };

@@ -3,10 +3,11 @@ import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
 import { isPageLogin } from "../../helper/url";
+import { Link } from "react-router-dom";
 
 function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });
-  const [pageLogin, setPageLogin] = useState(isPageLogin());
+  const [pageLogin] = useState(isPageLogin());
   useEffect(() => {
     authen();
   }, [pageLogin]);
@@ -57,7 +58,9 @@ function Header() {
               </ul>
               <li className="object">Mã code</li>
               <ul className="sub-menu">
-                <li>Mua code</li>
+                <Link to="/shop/qr">
+                  <li>Mua code</li>
+                </Link>
                 <li>Code đã mua</li>
               </ul>
             </ul>

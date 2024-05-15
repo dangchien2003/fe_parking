@@ -137,7 +137,11 @@ header nav .object {
 nav .parent li {
     width: 110px;
     padding: 0 5px;
-    
+}
+
+nav .parent a {
+    color: white;
+    text-decoration: none;
 }
 
 

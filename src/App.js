@@ -18,6 +18,7 @@ function App() {
         <Route path="/forget/:token" element={<AcceptForget />} />
         <Route path="/me" element={<MyInfo />} />
         <Route path="/size/device" element={<Size />} />
+        <Route path="/shop/qr" element={<Size />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>
     </div>
