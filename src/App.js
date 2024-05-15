@@ -16,7 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/forget/:token" element={<AcceptForget />} />
-        <Route path="/customer/me" element={<MyInfo />} />
+        <Route path="/me" element={<MyInfo />} />
         <Route path="/size/device" element={<Size />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>

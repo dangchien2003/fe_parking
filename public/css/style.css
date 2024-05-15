@@ -331,3 +331,11 @@ table thead {
 #change-password input:focus {
     outline: 2px solid #adb5bd;
 }
+
+.password .message {
+    color: white;
+    text-align: center;
+    padding: 3px 5px;
+    border-radius: 0 0 10px 10px;
+    animation: Show-Message 1s ease;
+}

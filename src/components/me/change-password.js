@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   checkAcceptPassword,
   checkNewPassword,
@@ -25,6 +25,7 @@ function ChangePassword() {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            // Authorization: `Bearer `,
           },
           body: JSON.stringify({
             oldPassword,
@@ -58,25 +59,29 @@ function ChangePassword() {
         return;
       }
       setMessage(dataRes.message.error);
+      setChangeOK(false);
     } catch (error) {
-      console.log(error);
       setMessage("Có lỗi xảy ra");
+    } finally {
+      setCalled(true);
     }
-
-    setCalled(true);
   };
 
   const handleChangeOldPassword = (e) => {
+    setCalled(false);
     setOldPassword(e.target.value);
   };
   const handleChangeNewPassword = (e) => {
+    setCalled(false);
     setNewPassword(e.target.value);
   };
   const handleChangeAcceptPassword = (e) => {
+    setCalled(false);
     setAcceptPassword(e.target.value);
   };
 
   const handleChangePassword = () => {
+    setCalled(false);
     // default error
     setErrorOldPassword("");
     setErrorNewPassword("");
@@ -104,33 +109,60 @@ function ChangePassword() {
   };
 
   return (
-    <form className="p-3 position-relative" id="change-password">
-      {called && <div className="position-absolute">{message}</div>}
-      <div>
-        <label>Mật khẩu hiện tại:</label>
-        <input type="password" onChange={handleChangeOldPassword} />
-        {errorOldPassword && <p className="text-danger">{errorOldPassword}</p>}
-      </div>
-      <div>
-        <label>Mật khẩu mới:</label>
-        <input type="password" onChange={handleChangeNewPassword} />
-        {errorNewPassword && <p className="text-danger">{errorNewPassword}</p>}
-      </div>
-      <div>
-        <label>Xác nhận mật khẩu:</label>
-        <input type="password" onChange={handleChangeAcceptPassword} />
-        {errorAcceptPassword && (
-          <p className="text-danger">{errorAcceptPassword}</p>
-        )}
-      </div>
-      <button
-        type="button"
-        className="btn btn-success mt-2"
-        onClick={handleChangePassword}
-      >
-        Đổi
-      </button>
-    </form>
+    <div>
+      {called && (
+        <div
+          className="message"
+          style={
+            changeOk ? { background: "#79dfc1" } : { background: "#e35d6a" }
+          }
+        >
+          {message}
+        </div>
+      )}
+      <form className="p-3" id="change-password">
+        <div>
+          <label>Mật khẩu hiện tại:</label>
+          <input
+            type="password"
+            onChange={handleChangeOldPassword}
+            value={oldPassword}
+          />
+          {errorOldPassword && (
+            <p className="text-danger">{errorOldPassword}</p>
+          )}
+        </div>
+        <div>
+          <label>Mật khẩu mới:</label>
+          <input
+            type="password"
+            onChange={handleChangeNewPassword}
+            value={newPassword}
+          />
+          {errorNewPassword && (
+            <p className="text-danger">{errorNewPassword}</p>
+          )}
+        </div>
+        <div>
+          <label>Xác nhận mật khẩu:</label>
+          <input
+            type="password"
+            onChange={handleChangeAcceptPassword}
+            value={acceptPassword}
+          />
+          {errorAcceptPassword && (
+            <p className="text-danger">{errorAcceptPassword}</p>
+          )}
+        </div>
+        <button
+          type="button"
+          className="btn btn-success mt-2"
+          onClick={handleChangePassword}
+        >
+          Đổi
+        </button>
+      </form>
+    </div>
   );
 }
 export default ChangePassword;
