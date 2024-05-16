@@ -7,6 +7,7 @@ import Register from "./page/register";
 import ForgetPassword from "./page/forget-password";
 import AcceptForget from "./page/accept-forget";
 import MyInfo from "./page/my-info";
+import Shop from "./page/shop-code/shop";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/forget/:token" element={<AcceptForget />} />
         <Route path="/me" element={<MyInfo />} />
         <Route path="/size/device" element={<Size />} />
-        <Route path="/shop/qr" element={<Size />} />
+        <Route path="/shop/qr" element={<Shop />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>
     </div>

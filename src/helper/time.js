@@ -36,4 +36,17 @@ function formatDays(days) {
   return `${days} ngày`;
 }
 
-export { convertTimeStamp, getNowTimestamp, diffTime, formatDays };
+function formatSeconds(seconds) {
+  if (seconds > 60 * 60) {
+    return `${Math.floor(seconds / 60 / 60)} giờ`;
+  }
+  return `${Math.floor(seconds / 60)} phút`;
+}
+
+export {
+  convertTimeStamp,
+  getNowTimestamp,
+  diffTime,
+  formatDays,
+  formatSeconds,
+};

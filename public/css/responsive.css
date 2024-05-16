@@ -86,4 +86,9 @@
     .group-info {
         padding: 5px 0;
     }
+
+    /* shop */
+    #shop .item {
+        margin: 10px auto;
+    }
 }

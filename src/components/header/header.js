@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
@@ -8,6 +8,24 @@ import { Link } from "react-router-dom";
 function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });
   const [pageLogin] = useState(isPageLogin());
+  const [widthPage, setWidthPage] = useState(window.innerWidth);
+  const ulRef = useRef();
+
+  useEffect(() => {
+    const handleSetHeightUl = () => {
+      if (window.innerWidth <= 550) {
+        ulRef.current.style.height = document.body.clientHeight + "px";
+      } else {
+        ulRef.current.style.height = "auto";
+      }
+    };
+    setWidthPage(window.innerWidth);
+    window.addEventListener("scroll" || "resize", handleSetHeightUl);
+    return () => {
+      window.removeEventListener("scroll" || "resize", handleSetHeightUl);
+    };
+  }, [widthPage]);
+
   useEffect(() => {
     authen();
   }, [pageLogin]);
@@ -50,7 +68,10 @@ function Header() {
             >
               <i className="bi bi-chevron-double-left"></i>
             </div>
-            <ul className={toggle.left === 0 ? "hide parent" : "show parent"}>
+            <ul
+              ref={ulRef}
+              className={toggle.left === 0 ? "hide parent" : "show parent"}
+            >
               <li className="object">Ví tiền</li>
               <ul className="sub-menu">
                 <li>Nạp tiền</li>
