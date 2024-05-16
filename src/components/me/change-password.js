@@ -3,6 +3,7 @@ import {
   checkAcceptPassword,
   checkNewPassword,
   checkOldPassword,
+  checkSamePassword,
 } from "../../helper/password";
 import { LoadingCircle } from "../loading/loading-circle";
 
@@ -114,6 +115,13 @@ function ChangePassword() {
         setErrorAcceptPassword(error);
         return;
       }
+
+      error = checkSamePassword(oldPassword, newPassword);
+      if (error) {
+        setErrorNewPassword(error);
+        return;
+      }
+
       setCalling(true);
     }
   };

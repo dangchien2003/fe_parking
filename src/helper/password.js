@@ -14,10 +14,21 @@ const checkNewPassword = (password) => {
   }
 };
 
+const checkSamePassword = (oldPassword, newPassword) => {
+  if (oldPassword === newPassword) {
+    return "Trùng mật khẩu hiện tại";
+  }
+};
+
 const checkAcceptPassword = (newPassword, acceptPassword) => {
   if (newPassword !== acceptPassword) {
     return "Mật khẩu Không khớp";
   }
 };
 
-export { checkOldPassword, checkNewPassword, checkAcceptPassword };
+export {
+  checkOldPassword,
+  checkNewPassword,
+  checkAcceptPassword,
+  checkSamePassword,
+};
