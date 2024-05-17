@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
 import { callRemaining } from "../../helper/remaing";
@@ -19,7 +19,7 @@ function InfoAccount() {
   return (
     <div className="info-account">
       <div className="money">
-        | Số dư: {remaining}
+        | Số dư: <span id="remaining">{remaining}</span>
         <sup>đ</sup> |
       </div>
       <div>
@@ -57,4 +57,4 @@ function InfoAccount() {
   );
 }
 
-export default InfoAccount;
+export default memo(InfoAccount);

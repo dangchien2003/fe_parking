@@ -5,6 +5,9 @@
 }
 
 @media (max-width: 550px) {
+    body {
+        min-height: 100vh;
+    }
 
     header .bg-header .size-logo {
         max-width: 55px;
@@ -71,6 +74,10 @@
     #my-info .account {
         border: 1px solid black;
         border-radius: 10px 10px 0 0;
+    }
+
+    #my-info .content {
+        margin-top: 20px;
     }
 
     #my-info .password {

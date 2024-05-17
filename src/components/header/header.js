@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
@@ -94,4 +94,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

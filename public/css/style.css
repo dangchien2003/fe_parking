@@ -6,7 +6,6 @@
 body {
     font-family: "Poppins", sans-serif;
     box-sizing: border-box;
-    min-height: 100vh;
 }
 
 
@@ -16,6 +15,8 @@ body {
     font-style: normal;
     letter-spacing: 2px;
     padding-bottom: 10px;
+    border-bottom: 1px solid #ececec;
+    margin-bottom: 20px;
 }
 
 .form-login {
@@ -184,6 +185,10 @@ header .info-account .btn {
     border: none !important;
 }
 
+header .info-account #remaining.changed {
+    animation: Show-Opacity 1s ease;
+}
+
 
 /* dashboard  */
 .margin-distance {
@@ -260,10 +265,10 @@ table thead {
 
 #my-info {
     font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variation-settings:
-    "slnt" 0;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0;
 }
 
 

@@ -33,6 +33,8 @@ function Shop() {
           // ok
           if (dataRes.success) {
             window.toastSuccess("Mua vé thành công");
+            window.diffRemaining(dataRes.data.price);
+            return;
           }
 
           // error
@@ -121,7 +123,6 @@ function Shop() {
     };
     getShop();
   }, []);
-
   return (
     <div>
       <Header />
