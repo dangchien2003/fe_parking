@@ -67,6 +67,9 @@ function Login() {
                 case "Email not exist":
                   errorMessage = "Email không tồn tại";
                   break;
+                case "Unverified account":
+                  errorMessage = "Tài khoản chưa được xác thực";
+                  break;
                 default:
                   errorMessage = "Lỗi không xác định";
               }

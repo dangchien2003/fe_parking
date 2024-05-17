@@ -157,7 +157,6 @@ function Register() {
             <span className="logo-text">arking</span>
           </div>
         </div>
-
         <form id="form" class="form-register ">
           <div className="d-block group-input">
             <label>Email</label>
@@ -216,9 +215,9 @@ function Register() {
             {errorConfirmPassword && (
               <div className="text-danger">{errorConfirmPassword}</div>
             )}
-            {registerSuccess && (
+            {/* {registerSuccess && (
               <i class="bi bi-check-lg text-success p-1">Tạo thành công</i>
-            )}
+            )} */}
           </div>
           <button
             type="button"
@@ -233,6 +232,16 @@ function Register() {
           </Link>
         </form>
         {loading && <LoadingCircle width="50px" center />}
+        {!loading && registerSuccess && (
+          <div className="text-center p-2 create-success">
+            <h4 className="text-success">
+              Đăng ký thành công <i class="bi bi-check-circle-fill"></i>
+            </h4>
+            <p style={{ fontSize: "18px" }}>
+              Tiến hành xác thực tài khoản tại hòm thư
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

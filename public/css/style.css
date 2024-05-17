@@ -388,3 +388,8 @@ table thead {
     font-weight: 500;
     color: #f04c5c;
 }
+
+
+.create-success {
+    animation: Show-Opacity 1s ease;
+}
