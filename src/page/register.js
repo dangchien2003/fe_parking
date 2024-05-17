@@ -53,7 +53,6 @@ function Register() {
           }),
         })
           .then((response) => {
-            setLoading(false);
             return response.json();
           })
           .then((data) => {
@@ -81,10 +80,15 @@ function Register() {
               setErrorConfirmPassword(errorMessage);
             } else {
               setRegisterSuccess(true);
+              setPassword("");
+              setConfirmPassword("");
             }
           })
           .catch(() => {
             setErrorConfirmPassword("Yêu cầu thất bại");
+          })
+          .finally(() => {
+            setLoading(false);
           });
       }
     };
@@ -228,7 +232,7 @@ function Register() {
             <div className="detail-icon">Đi tới đăng nhập</div>
           </Link>
         </form>
-        {loading && <LoadingCircle width="50px" />}
+        {loading && <LoadingCircle width="50px" center />}
       </div>
     </div>
   );
