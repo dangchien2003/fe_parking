@@ -21,7 +21,7 @@ function RenderReposit({ list }) {
       {list.map((element, index) => (
         <tr key={index}>
           <td>
-            {convertTimeStamp(element.cashAt, "hh:mm:ss")}
+            {convertTimeStamp(element.cashAt, "HH:mm:ss")}
             <br />
             {convertTimeStamp(element.cashAt, "DD/MM/yyyy")}
           </td>
