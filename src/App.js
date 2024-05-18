@@ -7,7 +7,7 @@ import Register from "./page/register";
 import ForgetPassword from "./page/forget-password";
 import AcceptForget from "./page/accept-forget";
 import MyInfo from "./page/my-info";
-import Shop from "./page/shop-code/shop";
+import Shop from "./page/shop";
 import AcceptAccount from "./page/accept-account";
 
 function App() {

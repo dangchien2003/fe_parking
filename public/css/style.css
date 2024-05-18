@@ -393,3 +393,8 @@ table thead {
 .create-success {
     animation: Show-Opacity 1s ease;
 }
+
+.password-binding {
+    font-size: 14px;
+    padding: 5px;
+}

@@ -172,6 +172,23 @@ function ChangePassword() {
             <p className="text-danger">{errorAcceptPassword}</p>
           )}
         </div>
+        <div className="password-binding">
+          <div>
+            <i class="bi bi-check2-circle p-1"></i>Mật khẩu có độ dài tối thiểu
+            8 ký tự
+          </div>
+          <div>
+            <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự
+            viết hoa
+          </div>
+          <div>
+            <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự số
+          </div>
+          <div>
+            <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự đặc
+            biệt
+          </div>
+        </div>
         {calling ? (
           <LoadingCircle width="30px" />
         ) : (

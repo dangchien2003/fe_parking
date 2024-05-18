@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 
+const regexPasswords =
+  /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,8 +104,9 @@ function Register() {
     } else {
       setErrorEmail("");
     }
-    if (password.length < 8) {
-      setErrorPassword("Mật khẩu lớn hơn 8 ký tự");
+
+    if (!regexPasswords.test(password)) {
+      setErrorPassword("Mật khẩu không hợp lệ");
     } else {
       if (confirmPassword !== password) {
         setErrorConfirmPassword("Mật khẩu không đúng");
@@ -215,10 +219,27 @@ function Register() {
             {errorConfirmPassword && (
               <div className="text-danger">{errorConfirmPassword}</div>
             )}
-            {/* {registerSuccess && (
-              <i class="bi bi-check-lg text-success p-1">Tạo thành công</i>
-            )} */}
           </div>
+
+          <div className="password-binding">
+            <div>
+              <i class="bi bi-check2-circle p-1"></i>Mật khẩu có độ dài tối
+              thiểu 8 ký tự
+            </div>
+            <div>
+              <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự
+              viết hoa
+            </div>
+            <div>
+              <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự
+              số
+            </div>
+            <div>
+              <i class="bi bi-check2-circle p-1"></i>Bao gồm tối thiểu 1 ký tự
+              đặc biệt
+            </div>
+          </div>
+
           <button
             type="button"
             className="btn btn-primary w-100 mt-3 position-relative"

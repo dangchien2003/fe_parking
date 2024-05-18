@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import Header from "../../components/header/header";
-import { formatMoney } from "../../helper/number";
-import LoadingShop from "../../components/loading/loading-shop";
-import { formatSeconds } from "../../helper/time";
+import Header from "../components/header/header";
+import { formatMoney } from "../helper/number";
+import LoadingShop from "../components/loading/loading-shop";
+import { formatSeconds } from "../helper/time";
 
 function Shop() {
   const [shop, setShop] = useState([]);

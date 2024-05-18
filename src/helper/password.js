@@ -1,3 +1,6 @@
+const regexPasswords =
+  /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+
 const checkOldPassword = (password) => {
   if (password === "") {
     return "Mật khẩu không được để trống";
@@ -5,12 +8,8 @@ const checkOldPassword = (password) => {
 };
 
 const checkNewPassword = (password) => {
-  if (password === "") {
-    return "Mật khẩu không được để trống";
-  }
-
-  if (password.length < 8) {
-    return "Mật khẩu mới phải lớn hơn 8 ký tự";
+  if (!regexPasswords.test(password)) {
+    return "Mật khẩu hông hợp lệ";
   }
 };
 
