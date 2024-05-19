@@ -146,7 +146,7 @@ function ForgetPassword() {
             </p>
           )}
         </form>
-        {loading && <LoadingCircle width="50px" />}
+        {loading && <LoadingCircle width="50px" center />}
       </div>
     </div>
   );

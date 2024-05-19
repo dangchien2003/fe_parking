@@ -41,6 +41,7 @@ function AcceptForget() {
           }
         } else {
           setAcceptOK(true);
+          setErrorAccept("");
         }
       })
       .catch((error) => {
@@ -63,10 +64,10 @@ function AcceptForget() {
           </div>
         </div>
         <form id="form">
-          {errorAccept && (
+          {errorAccept !== "" && (
             <div style={{ padding: "20px", color: "red" }}>{errorAccept}</div>
           )}
-          {!acceptOK && (
+          {acceptOK && errorAccept === "" && (
             <div style={{ padding: "20px", color: "#20c997" }}>
               Mật khẩu sẽ được gửi trong ít phút nữa. Vui lòng kiểm kiểm tra hòm
               thư của bạn.
@@ -76,7 +77,7 @@ function AcceptForget() {
             </div>
           )}
         </form>
-        {loading && <LoadingCircle width="50px" />}
+        {loading && <LoadingCircle width="50px" center />}
       </div>
     </div>
   );
