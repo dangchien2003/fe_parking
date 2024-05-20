@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LoadingLineRun from "../components/loading/loading-line-run";
 import { convertTimeStamp } from "../helper/time";
 import { diffTime, formatDays } from "../helper/time";
+import Email from "../components/me/email";
 function MyInfo() {
   const [info, setInfo] = useState(null);
   const [errorFetch, setErrorFetch] = useState("");
@@ -60,13 +61,7 @@ function MyInfo() {
                       <span className="topic">Mã khách hàng: </span>
                       <span className="text">{info.uid}</span>
                     </p>
-                    <p className="group-info">
-                      <span className="topic">Email: </span>
-                      <span className="text">{info.email}</span>
-                      <Link className="d-block" to="/me/change-email">
-                        Thay đổi email
-                      </Link>
-                    </p>
+                    <Email email={info.email} />
                     <p className="group-info ">
                       <span className="topic">Trạng thái: </span>
                       {info.block === "0" ? (

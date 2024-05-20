@@ -325,13 +325,13 @@ table thead {
 }
 
 /* change password */
-#change-password label {
+#change-password label, #change-email label.label {
     font-weight: 500;
     display: block;
     padding: 3px 0;
 }
 
-#change-password input {
+#change-password input, #change-email input.input {
     border: 1px solid #ececec;
     border-radius: 10px;
     padding: 3px 7px;
@@ -397,4 +397,30 @@ table thead {
 .password-binding {
     font-size: 14px;
     padding: 5px;
+}
+
+#change-email {
+    overflow: hidden;
+    height: 100px;
+    animation: Show-ChangePassword 1s ease;
+}
+
+#change-email button {
+    height: 30px;
+    width: 30px;
+    padding: 0;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+#change-email button i {
+    font-size: 14px;
+}
+
+#change-email .success {
+    animation: Show-Opacity 1s ease;
+}
+
+#change-email .success .tittle {
+    font-size: 20px;
 }

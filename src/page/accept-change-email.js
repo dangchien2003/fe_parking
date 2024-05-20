@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 
-function AcceptAccount() {
+function AcceptChangeEmail() {
   const { token } = useParams();
   const [loaded, setLoaded] = useState(false);
   const [message, setMessage] = useState("");
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BE}/customer/accept-account`, {
+    fetch(`${process.env.REACT_APP_BE}/customer/accept-change-email`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        token: token,
+        tokenChange: token,
       }),
     })
       .then((response) => response.json())
@@ -21,17 +21,14 @@ function AcceptAccount() {
         if (!dataRes.success) {
           let logMessage = "";
           switch (dataRes.message.error) {
-            case "Token is null":
-              logMessage = "Không tồn tại mã xác thực";
-              break;
             case "Invalid token":
-              logMessage = "Mã xác thực hết hiệu lực hoặc không tồn tại";
+              logMessage = "Phiên đã hết hạn hoặc không tồn tại";
               break;
             case "Account not exist":
               logMessage = "Tài khoản không tồn tại";
               break;
-            case "Account accepted":
-              logMessage = "Tài khoản đã được xác thực trước đó";
+            case "Session has ended":
+              logMessage = "Phiên không còn hiệu lực";
               break;
             default:
               logMessage = "Lỗi không xác định";
@@ -56,12 +53,12 @@ function AcceptAccount() {
         <div>
           {message == "" ? (
             <div className="text-center">
-              <h2 className=" text-success">Xác thực thành công</h2>
+              <h2 className=" text-success">Thay đổi thành công</h2>
               <Link to="/login">Quay trở về đăng nhập</Link>
             </div>
           ) : (
             <div className="text-center">
-              <h2 className=" text-danger">Xác thực thất bại</h2>
+              <h2 className=" text-danger">Thay đổi thất bại</h2>
               <span>{message}</span>
             </div>
           )}
@@ -71,4 +68,4 @@ function AcceptAccount() {
   );
 }
 
-export default AcceptAccount;
+export default AcceptChangeEmail;
