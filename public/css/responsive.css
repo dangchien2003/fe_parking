@@ -98,4 +98,10 @@
     #shop .item {
         margin: 10px auto;
     }
+
+    #cash #option {
+        padding-bottom: 20px;
+        border: none;
+        border-bottom: 2px solid rgba(44, 43, 43, 0.632);
+    }
 }

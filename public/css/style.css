@@ -424,3 +424,39 @@ table thead {
 #change-email .success .tittle {
     font-size: 20px;
 }
+
+/* add cash */
+.tittle {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+#cash #option {
+    border-right: 2px solid rgba(44, 43, 43, 0.632);
+    min-height: 500px;
+}
+
+#cash #option .menh-gia {
+    border: 1px solid #ececec;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#cash #option .hd {
+    border: 1px solid #ececec;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#cash #qr .img-qr {
+  text-align: center;
+}
+
+#cash #qr .img-qr img {
+    width: 300px;
+    height: 300px;
+    padding: 5px;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    margin-top: 20px;
+}

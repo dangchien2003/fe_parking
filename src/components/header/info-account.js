@@ -2,13 +2,18 @@ import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
 import { callRemaining } from "../../helper/remaing";
-function InfoAccount() {
+function InfoAccount({ onLoad }) {
   const [remaining, setRemaining] = useState(0);
 
   useEffect(() => {
     const data = async () => {
       const data = await callRemaining();
       setRemaining(formatMoney(data));
+
+      // set logo
+      setTimeout(() => {
+        onLoad();
+      }, 1);
     };
     data();
   }, []);

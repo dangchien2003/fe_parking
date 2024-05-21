@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import Notify from "../notify/notify";
 import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
@@ -9,9 +9,18 @@ function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });
   const [pageLogin] = useState(isPageLogin());
   const [widthPage, setWidthPage] = useState(window.innerWidth);
+  const [hideText, setHideText] = useState(false);
   const ulRef = useRef();
+  const aRef = useRef();
+
+  const handleSetWidthLogo = useCallback(() => {
+    if (aRef.current.offsetWidth < 127) {
+      setHideText(true);
+    }
+  }, []);
 
   useEffect(() => {
+    console.log(aRef.current.offsetWidth);
     const handleSetHeightUl = () => {
       if (window.innerWidth <= 550) {
         ulRef.current.style.height = document.body.clientHeight + "px";
@@ -53,10 +62,26 @@ function Header() {
   return (
     <header>
       <div className="bg-header">
-        <a href={`/`} className="text-decoration-none">
+        <a
+          href={`/`}
+          className="text-decoration-none"
+          ref={aRef}
+          style={{
+            margin: "auto 0px",
+          }}
+        >
           <div>
             <img src={`/img/logo.png`} className="size-logo" alt="logo" />
-            <span className="logo-text text-white">arking</span>
+            <span
+              className="logo-text text-white hide"
+              style={
+                hideText
+                  ? { animation: "resize-logo 1s ease", fontSize: "18px" }
+                  : {}
+              }
+            >
+              arking
+            </span>
           </div>
         </a>
         <div className="nav-bar">
@@ -74,7 +99,9 @@ function Header() {
             >
               <li className="object">Ví tiền</li>
               <ul className="sub-menu">
-                <li>Nạp tiền</li>
+                <Link to="/cash/add">
+                  <li>Nạp tiền</li>
+                </Link>
                 <li>Lịch sử nạp</li>
               </ul>
               <li className="object">Mã code</li>
@@ -86,7 +113,7 @@ function Header() {
               </ul>
             </ul>
           </nav>
-          <InfoAccount />
+          <InfoAccount onLoad={handleSetWidthLogo} />
         </div>
       </div>
       <Notify />
