@@ -20,7 +20,6 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    console.log(aRef.current.offsetWidth);
     const handleSetHeightUl = () => {
       if (window.innerWidth <= 550) {
         ulRef.current.style.height = document.body.clientHeight + "px";

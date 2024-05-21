@@ -1,12 +1,97 @@
 import { useEffect, useState } from "react";
 import Header from "../components/header/header";
+import { formatMoney } from "../helper/number";
+import { LoadingCircle } from "../components/loading/loading-circle";
 
 function AddCash() {
-  const [denominations, setDenominations] = useState(false);
+  const [denominationsStr, setDenominationsStr] = useState("");
+  const [denominationsNum, setDenominationsNum] = useState(0);
+  const [info, setInfo] = useState({});
+  const [infoLoaded, setInfoLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const callGetInfo = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BE}/customer/me`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const dataRes = await response.json();
+        if (!dataRes.success) {
+          throw new Error(dataRes.message.error);
+        }
+        setInfo(dataRes.data);
+        setInfoLoaded(true);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    callGetInfo();
+  }, []);
 
   const handleChangeFaceValue = (e) => {
-    const value = e.target.innerText.replace(/[.đ]/g, "");
-    setDenominations(value);
+    const value = e.target.innerText.replace(/\D/g, "");
+    handlleValue(parseInt(value));
+  };
+
+  const handleChangeInput = (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    handlleValue(parseInt(value));
+  };
+
+  const handlleValue = (value) => {
+    if (value > 1000000 || !infoLoaded) {
+      return;
+    }
+    if (isNaN(value)) {
+      setDenominationsStr("");
+      setDenominationsNum(0);
+      return;
+    }
+    setDenominationsStr(formatMoney(value).trim());
+    setDenominationsNum(value);
+  };
+
+  const handleBankOk = () => {
+    if (denominationsNum < 10000) {
+      window.toastError("Mệnh giá nạp phải trên 10.000đ");
+      return;
+    }
+    setLoading(true);
+    fetch(`${process.env.REACT_APP_BE}/customer/cash/input-money`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        money: denominationsNum,
+      }),
+    })
+      .then((response) => response.json())
+      .then((dataRes) => {
+        if (!dataRes.success) {
+          if (dataRes.message.money) {
+            window.toastError("Mệnh giá nạp phải trên 10.000đ");
+            return;
+          }
+          throw new Error("Lỗi không xác định");
+        }
+        window.toastSuccess("Số dư sẽ được cộng sau ít phút");
+        setDenominationsNum(0);
+        setDenominationsStr("");
+      })
+      .catch((error) => {
+        console.log(error);
+        window.toastError("Có lỗi xảy ra hãy liên hệ với chúng tôi");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -31,6 +116,9 @@ function AddCash() {
               </div>
               <div className="tittle text-danger">⚠️Lưu ý</div>
               <div className="m-1 mt-0">
+                <div>
+                  - Không thay đổi mệnh giá sau khi đã chuyển khoản thành công
+                </div>
                 <div>- Nếu có vấn đề phát sinh hãy liên hệ với chúng tôi</div>
                 <div>
                   - Mọi vấn đề phát sinh do bạn không tuân thủ các bước trên sẽ
@@ -70,19 +158,46 @@ function AddCash() {
                 >
                   100.000<sup>đ</sup>
                 </button>
+                <button
+                  className="btn btn-primary m-2"
+                  onClick={handleChangeFaceValue}
+                >
+                  200.000<sup>đ</sup>
+                </button>
+                <button
+                  className="btn btn-primary m-2"
+                  onClick={handleChangeFaceValue}
+                >
+                  500.000<sup>đ</sup>
+                </button>
               </div>
-              <button className="btn btn-success m-2 mt-0">
-                Đã chuyển khoản
-              </button>
+              <div>
+                <label>Số tiền nạp:&nbsp; </label>
+                <input
+                  className="input mb-1 so-tien"
+                  onChange={handleChangeInput}
+                  value={denominationsStr}
+                />
+              </div>
+              {loading ? (
+                <LoadingCircle width="30px" />
+              ) : (
+                <button
+                  className="btn btn-success m-2 mt-0"
+                  onClick={handleBankOk}
+                >
+                  Đã chuyển khoản
+                </button>
+              )}
             </div>
           </div>
           <div className="col-lg-5" id="qr">
             <div>
               <div className="tittle text-center fs-3 pt-2">Quét tôi đi</div>
               <div className="img-qr">
-                {denominations && (
+                {denominationsNum >= 10000 && (
                   <img
-                    src={`https://img.vietqr.io/image/vietinbank-113366668888-qr_only.png?amount=${denominations}&addInfo=dong%20qop%20quy%20vac%20xin&accountName=Quy%20Vac%20Xin%20Covid`}
+                    src={`https://img.vietqr.io/image/techcombank-2526012003-qr_only.png?amount=${denominationsNum}&addInfo=${info.uid}`}
                     alt="qr"
                   />
                 )}
