@@ -17,7 +17,7 @@ function HistoryBuyCode() {
     const loadQuantityBought = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BE}/customer/code/bought?quantity=10`,
+          `${process.env.REACT_APP_BE}/customer/code/bought`,
           {
             method: "GET",
             credentials: "include",
