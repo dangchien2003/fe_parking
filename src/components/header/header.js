@@ -16,12 +16,11 @@ function Header() {
   const aRef = useRef();
 
   useEffect(() => {
-    const timeEndToken = getCookie("ETok");
-    if (!timeEndToken || isNaN(timeEndToken)) {
-      return;
-    }
-
     const handleRefreshToken = () => {
+      const timeEndToken = getCookie("ETok");
+      if (!timeEndToken || isNaN(timeEndToken)) {
+        return;
+      }
       const TimeRemaining = timeEndToken - getNowTimestamp();
       if (TimeRemaining < 60 * 1000 && TimeRemaining > 0) {
         fetch(`${process.env.REACT_APP_BE}/customer/refresh/tok`, {
