@@ -80,13 +80,30 @@ function Login() {
                 errorMessage = data.message.email;
               }
               setErrorPassword(errorMessage);
-            } else {
-              window.location.href = "/";
+              return;
             }
+
+            // client set cookie
+            if (data.cookies) {
+              for (var key in data.cookies) {
+                if (!data.cookies[key]) {
+                  continue;
+                }
+                const value = data.cookies[key].split("->MA");
+                if (value.length < 2 || isNaN(value[1])) {
+                  continue;
+                }
+                document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
+              }
+            }
+            // ok
+            window.location.href = "/";
           })
           .catch(() => {
-            setLoading(false);
             setErrorPassword("Yêu cầu thất bại");
+          })
+          .finally(() => {
+            setLoading(false);
           });
       }
     };

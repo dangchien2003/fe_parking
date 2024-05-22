@@ -4,6 +4,8 @@ import InfoAccount from "./info-account";
 import authen from "../../valid/authen";
 import { isPageLogin } from "../../helper/url";
 import { Link } from "react-router-dom";
+import { getCookie } from "../../helper/cookie";
+import { getNowTimestamp } from "../../helper/time";
 
 function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });
@@ -12,6 +14,49 @@ function Header() {
   const [hideText, setHideText] = useState(false);
   const ulRef = useRef();
   const aRef = useRef();
+
+  useEffect(() => {
+    const timeEndToken = getCookie("ETok");
+    if (!timeEndToken || isNaN(timeEndToken)) {
+      return;
+    }
+
+    const handleRefreshToken = () => {
+      const TimeRemaining = timeEndToken - getNowTimestamp();
+      if (TimeRemaining < 60 * 1000 && TimeRemaining > 0) {
+        fetch(`${process.env.REACT_APP_BE}/customer/refresh/tok`, {
+          method: "GET",
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((dataRes) => {
+            if (!dataRes.success) {
+              throw new Error("Success is false");
+            }
+            // client set cookie
+            if (dataRes.cookies) {
+              for (var key in dataRes.cookies) {
+                if (!dataRes.cookies[key]) {
+                  continue;
+                }
+                const value = dataRes.cookies[key].split("->MA");
+                if (value.length < 2 || isNaN(value[1])) {
+                  continue;
+                }
+                document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
+              }
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+    };
+
+    handleRefreshToken();
+
+    const intervalId = setInterval(handleRefreshToken, 30 * 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleSetWidthLogo = useCallback(() => {
     if (aRef.current.offsetWidth < 127) {
