@@ -11,6 +11,7 @@ import Shop from "./page/shop";
 import AcceptAccount from "./page/accept-account";
 import AcceptChangeEmail from "./page/accept-change-email";
 import AddCash from "./page/add-cash";
+import HelloWorld from "./page/helloworld";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
         <Route path="/size/device" element={<Size />} />
         <Route path="/shop/qr" element={<Shop />} />
         <Route path="/cash/add" element={<AddCash />} />
+
+        <Route path="/helloworld" element={<HelloWorld />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>
     </div>
