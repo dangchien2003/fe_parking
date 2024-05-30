@@ -53,7 +53,6 @@ function RenderQr({ qrid }) {
       return;
     }
     setDownloaded(true);
-    renderNewQr(document.getElementById("qr-code"));
     const canvas = document.getElementById("qr-code");
     const pngUrl = canvas
       .toDataURL("image/png")
@@ -76,7 +75,13 @@ function RenderQr({ qrid }) {
             "Không thể lấy mã"
           ) : (
             <>
-              <QRCode value={content} id="qr-code" size={300} />
+              <QRCode
+                value={content}
+                id="qr-code"
+                size={300}
+                level={"H"}
+                includeMargin={true}
+              />
               <div>
                 <button className="btn btn-success" onClick={handleDownloadQr}>
                   <i class="bi bi-arrow-bar-down"></i>&nbsp;Tải xuống
