@@ -12,6 +12,7 @@ import AcceptAccount from "./page/accept-account";
 import AcceptChangeEmail from "./page/accept-change-email";
 import AddCash from "./page/add-cash";
 import HelloWorld from "./page/helloworld";
+import InfoQr from "./page/info-qr";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/size/device" element={<Size />} />
         <Route path="/shop/qr" element={<Shop />} />
         <Route path="/cash/add" element={<AddCash />} />
+        <Route path="/qr/info/:qrid" element={<InfoQr />} />
 
         <Route path="/helloworld" element={<HelloWorld />} />
         <Route path="/*" element={<Dashboard />} />

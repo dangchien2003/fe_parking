@@ -1,21 +1,7 @@
-import { convertTimeStamp, getNowTimestamp } from "../../helper/time";
+import { Link } from "react-router-dom";
+import { handleStatus } from "../../helper/ticket";
+import { convertTimeStamp } from "../../helper/time";
 function RenderListBougthQr({ list }) {
-  const now = getNowTimestamp();
-  const handleStatus = (element) => {
-    let status = "";
-    if (
-      element.checkoutAt ||
-      element.cancleAt !== null ||
-      element.expireAt < now
-    ) {
-      status = "Kết thúc";
-    } else if (element.checkinAt) {
-      status = "Vào";
-    } else {
-      status = "Chờ";
-    }
-    return status;
-  };
   return (
     <tbody>
       {list.map((element) => {
@@ -46,7 +32,7 @@ function RenderListBougthQr({ list }) {
             </td>
             <td>{handleStatus(element)}</td>
             <td>
-              <a href="#">Xem chi tiết</a>
+              <Link to={`/qr/info/${element.qrid}`}>Xem chi tiết</Link>
             </td>
           </tr>
         );

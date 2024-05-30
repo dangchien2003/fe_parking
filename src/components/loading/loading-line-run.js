@@ -1,7 +1,7 @@
-function LoadingLineRun({ quality }) {
-  quality = 10;
+function LoadingLineRun({ quantity }) {
+  quantity = quantity || 10;
   const lines = [];
-  for (let i = 1; i <= quality; i++) {
+  for (let i = 1; i <= quantity; i++) {
     lines.push(
       <div key={i} className="line-parent">
         <div className="line-child child-1">

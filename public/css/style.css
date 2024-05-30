@@ -466,3 +466,59 @@ table thead {
 #cash .so-tien {
     max-width: 150px;
 }
+
+
+#i-qr #move-qr{
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
+#i-qr #info .group {
+    border-left: 2px solid #ececec;;
+}
+
+#i-qr #info .group span {
+    padding-right: 10px;
+}
+
+#i-qr #plate {
+    display: grid;
+    grid-template-columns: 5fr 5fr;
+    gap: 20px;
+    padding-top: 20px;
+}
+
+#i-qr #plate > div {
+    display: flex;
+}
+
+#i-qr #plate div:first-child {
+    justify-content: end;
+}
+
+#i-qr #plate .show {
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    padding: 5px;
+    min-height: 100px;
+    min-width: 150px;
+    text-align: center;
+}
+
+#i-qr #plate .show img {
+    width: 500px;
+    border-radius: 10px;
+    object-fit: contain
+}
+
+#i-qr #qr {
+    border-top: 1px solid black;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+#i-qr #qr #qr-code {
+    width: 300px;
+    height: 300px;
+}

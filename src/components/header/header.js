@@ -65,7 +65,7 @@ function Header() {
 
   useEffect(() => {
     const handleSetHeightUl = () => {
-      if (window.innerWidth <= 550) {
+      if (window.innerWidth <= 700) {
         ulRef.current.style.height = document.body.clientHeight + "px";
       } else {
         ulRef.current.style.height = "auto";
