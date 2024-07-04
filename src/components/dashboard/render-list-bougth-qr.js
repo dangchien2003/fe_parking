@@ -13,21 +13,25 @@ function RenderListBougthQr({ list }) {
               {convertTimeStamp(element.buyAt, "DD/MM/yyy")}
             </td>
             <td>
-              {element.checkinAt && (
+              {element.checkinAt ? (
                 <>
                   {convertTimeStamp(element.checkinAt, "HH:mm:ss")}
                   <br />
                   {convertTimeStamp(element.checkinAt, "DD/MM/yyy")}
                 </>
+              ) : (
+                ""
               )}
             </td>
             <td>
-              {element.checkoutAt && (
+              {element.checkoutAt ? (
                 <>
                   {convertTimeStamp(element.checkoutAt, "HH:mm:ss")}
                   <br />
                   {convertTimeStamp(element.checkoutAt, "DD/MM/yyy")}
                 </>
+              ) : (
+                ""
               )}
             </td>
             <td>{handleStatus(element)}</td>
