@@ -43,7 +43,7 @@ function InfoQr() {
   };
 
   const getExpireAt = (info) => {
-    if (info.checkinAt !== null) {
+    if (info.checkinAt !== 0) {
       return info.checkinAt + 24 * 60 * 60 * 1000;
     }
     return info.expireAt;

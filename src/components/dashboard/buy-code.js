@@ -47,10 +47,10 @@ function HistoryBuyCode() {
       history.map((element) => {
         if (
           !(
-            element.cancleAt !== null ||
+            element.cancleAt !== 0 ||
             (element.expireAt < now &&
-              element.checkinAt === null &&
-              element.checkoutAt === null)
+              element.checkinAt === 0 &&
+              element.checkoutAt === 0)
           )
         ) {
           calculaterTotalSpent += element.price;
