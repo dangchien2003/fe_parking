@@ -17,6 +17,7 @@ function ActionCode({ info, onCancleOk }) {
   const [getPrice, setGetPrice] = useState(false);
   const [message, setMessage] = useState("");
   const [calling, setCalling] = useState(false);
+  const [callingExtend, setCallingExtend] = useState(false);
 
   const handleCancleCode = async () => {
     try {
@@ -78,7 +79,12 @@ function ActionCode({ info, onCancleOk }) {
   };
 
   const handleGetPriceExtend = () => {
+    if (callingExtend) {
+      window.toastError("Thao tác chậm lại");
+      return;
+    }
     handleClearData();
+    setCallingExtend(true);
     fetch(
       `${process.env.REACT_APP_BE}/customer/code/extend/price/${info.qrid}?date=${date}&time=${valueSelectTime}`,
       {
@@ -101,11 +107,15 @@ function ActionCode({ info, onCancleOk }) {
       })
       .catch(() => {
         setMessage("Có lỗi xảy ra");
+      })
+      .finally(() => {
+        setCallingExtend(false);
       });
   };
 
   const handleBuyTicket = () => {
     if (calling) {
+      window.toastError("Thao tác chậm lại");
       return;
     }
 
