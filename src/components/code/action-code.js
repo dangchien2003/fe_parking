@@ -16,6 +16,7 @@ function ActionCode({ info, onCancleOk }) {
   const [totalExtend, setTotalExtend] = useState("0");
   const [getPrice, setGetPrice] = useState(false);
   const [message, setMessage] = useState("");
+  const [calling, setCalling] = useState(false);
 
   const handleCancleCode = async () => {
     try {
@@ -104,6 +105,11 @@ function ActionCode({ info, onCancleOk }) {
   };
 
   const handleBuyTicket = () => {
+    if (calling) {
+      return;
+    }
+
+    setCalling(true);
     setMessage("");
     fetch(
       `${process.env.REACT_APP_BE}/customer/code/extend/${info.qrid}?date=${date}&time=${valueSelectTime}`,
@@ -126,9 +132,11 @@ function ActionCode({ info, onCancleOk }) {
           message = "Lỗi không xác định";
         }
         setMessage(message);
+        setCalling(false);
       })
       .catch(() => {
         setMessage("Có lỗi xảy ra");
+        setCalling(false);
       });
   };
 
