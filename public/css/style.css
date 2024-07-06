@@ -522,3 +522,22 @@ table thead {
     width: 300px;
     height: 300px;
 }
+
+#action_code button {
+    height: 40px;
+    font-size: 16px;
+    margin: 5px;
+}
+
+#form_extend_code {
+
+}
+
+input.date {
+
+}
+
+select#time {
+    border: none;
+    border-left: 1px solid #CCC;
+}

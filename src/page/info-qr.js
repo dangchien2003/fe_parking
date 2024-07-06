@@ -5,6 +5,7 @@ import LoadingLineRun from "../components/loading/loading-line-run";
 import { formatMoney } from "../helper/number";
 import { convertTimeStamp, getNowTimestamp } from "../helper/time";
 import RenderQr from "../components/code/render-qr-code";
+import ActionCode from "../components/code/action-code";
 
 function InfoQr() {
   const { qrid } = useParams();
@@ -12,7 +13,7 @@ function InfoQr() {
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [info, setInfo] = useState({});
-
+  const [ticketCancled, setTicketCancled] = useState(0);
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BE}/customer/code/i?qrid=${qrid}`, {
       method: "GET",
@@ -42,17 +43,16 @@ function InfoQr() {
     setShowQr(true);
   };
 
-  const getExpireAt = (info) => {
-    if (info.checkinAt !== 0) {
-      return info.checkinAt + 24 * 60 * 60 * 1000;
-    }
-    return info.expireAt;
+  const handleCancleCode = () => {
+    setTicketCancled(1);
   };
+
   return (
     <>
       <Header />
       <div className="margin-distance" id="i-qr">
         <h3 className="name">Thông tin: {qrid}</h3>
+
         <a href="#qr" onClick={handleRenderQr} className="fs-5" id="move-qr">
           Lấy mã code
         </a>
@@ -85,7 +85,7 @@ function InfoQr() {
                 <div>
                   <span>Hết hạn: </span>
                   <span>
-                    {convertTimeStamp(getExpireAt(info), "HH:mm:ss DD/MM/yyy")}
+                    {convertTimeStamp(info.expireAt, "HH:mm:ss DD/MM/yyy")}
                   </span>
                 </div>
               </div>
@@ -103,7 +103,7 @@ function InfoQr() {
                   <span>
                     <input
                       type="checkbox"
-                      checked={info.cancleAt ? true : false}
+                      checked={info.cancleAt || ticketCancled ? true : false}
                     />
                   </span>
                   <span>Huỷ vé</span>
@@ -113,8 +113,7 @@ function InfoQr() {
                     <input
                       type="checkbox"
                       checked={
-                        getExpireAt(info) <= getNowTimestamp() ||
-                        info.checkoutAt
+                        info.expireAt <= getNowTimestamp() || info.checkoutAt
                           ? true
                           : false
                       }
@@ -122,6 +121,12 @@ function InfoQr() {
                   </span>
                   <span>Đã hết hạn</span>
                 </div>
+              </div>
+
+              <div className="d-flex justify-content-end" id="action_code">
+                {loaded && (
+                  <ActionCode info={info} onCancleOk={handleCancleCode} />
+                )}
               </div>
             </>
           )}

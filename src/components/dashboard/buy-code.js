@@ -53,7 +53,7 @@ function HistoryBuyCode() {
               element.checkoutAt === 0)
           )
         ) {
-          calculaterTotalSpent += element.price;
+          calculaterTotalSpent += element.price + element.priceExtend;
         }
       });
 
