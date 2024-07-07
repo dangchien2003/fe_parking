@@ -5,8 +5,8 @@ import { LoadingCircle } from "../components/loading/loading-circle";
 import { delToken, getCookie } from "../helper/cookie";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("chienboy03@gmail.com");
+  const [password, setPassword] = useState("Chienkoi123.");
   const [remember, setRemember] = useState(false);
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
