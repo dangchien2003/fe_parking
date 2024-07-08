@@ -2,35 +2,15 @@ import { useEffect, useState } from "react";
 import Header from "../components/header/header";
 import { formatMoney } from "../helper/number";
 import { LoadingCircle } from "../components/loading/loading-circle";
+import { randomString } from "../helper/random";
 
 function AddCash() {
   const [denominationsStr, setDenominationsStr] = useState("");
   const [denominationsNum, setDenominationsNum] = useState(0);
-  const [info, setInfo] = useState({});
-  const [infoLoaded, setInfoLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [contentQr, setContentQr] = useState("");
   useEffect(() => {
-    const callGetInfo = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BE}/customer/me`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        const dataRes = await response.json();
-        if (!dataRes.success) {
-          throw new Error(dataRes.message.error);
-        }
-        setInfo(dataRes.data);
-        setInfoLoaded(true);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    callGetInfo();
+    setContentQr(randomString(15));
   }, []);
 
   const handleChangeFaceValue = (e) => {
@@ -44,7 +24,7 @@ function AddCash() {
   };
 
   const handlleValue = (value) => {
-    if (value > 1000000 || !infoLoaded) {
+    if (value > 1000000) {
       return;
     }
     if (isNaN(value)) {
@@ -70,6 +50,7 @@ function AddCash() {
       },
       body: JSON.stringify({
         money: denominationsNum,
+        stringCode: contentQr,
       }),
     })
       .then((response) => response.json())
@@ -105,10 +86,7 @@ function AddCash() {
               <div className="tittle">Hướng dẫn</div>
               <div className="m-1 mt-0">
                 <div>B1: Chọn mệnh giá nạp</div>
-                <div>
-                  B2: Quét mã QR chuyển khoản với nội dung là ID tài khoản (Đã
-                  tự động điền)
-                </div>
+                <div>B2: Quét mã QR chuyển khoản với nội dung điền sẵn</div>
                 <div>B3: Chọn nút đã chuyển khoản phía dưới</div>
                 <div>
                   B4: Bạn sẽ được cộng tiền chỉ sau vài phút, cố gắng đợi nhé
@@ -195,9 +173,9 @@ function AddCash() {
             <div>
               <div className="tittle text-center fs-3 pt-2">Quét tôi đi</div>
               <div className="img-qr">
-                {denominationsNum >= 10000 && (
+                {denominationsNum >= 10000 && contentQr.length > 0 && (
                   <img
-                    src={`https://img.vietqr.io/image/techcombank-2526012003-qr_only.png?amount=${denominationsNum}&addInfo=${info.uid}`}
+                    src={`https://img.vietqr.io/image/tpbank-04289426001-qr_only.png?amount=${denominationsNum}&addInfo=${contentQr}`}
                     alt="qr"
                   />
                 )}
