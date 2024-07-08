@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const loadNotify = () => {
-  return "56.4M bài đăng. Hãy khám phá video liên quan đến Fake Text Audio trên TikTok. Xem thêm video về Fake Audio Sound, Fake Call Audio Sound, Fake Text Messages, ...";
+  return "Duyệt tiền tự động đã dừng hoạt động vì ngân hàng chặn IP máy chủ";
 };
 function Notify() {
   const [notifis, setNotifis] = useState(loadNotify);
