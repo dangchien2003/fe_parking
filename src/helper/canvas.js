@@ -1,5 +1,4 @@
 function renderNewQr(canvas, parent) {
-  console.log(1);
   const ctx = canvas.getContext("2d");
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
