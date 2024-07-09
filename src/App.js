@@ -13,6 +13,7 @@ import AcceptChangeEmail from "./page/accept-change-email";
 import AddCash from "./page/add-cash";
 import HelloWorld from "./page/helloworld";
 import InfoQr from "./page/info-qr";
+import Controller from "./page/controller";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/qr/info/:qrid" element={<InfoQr />} />
 
         <Route path="/helloworld" element={<HelloWorld />} />
+        <Route path="/controller" element={<Controller />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>
     </div>
