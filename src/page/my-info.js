@@ -64,7 +64,7 @@ function MyInfo() {
                     <Email email={info.email} />
                     <p className="group-info ">
                       <span className="topic">Trạng thái: </span>
-                      {info.block === "0" ? (
+                      {info.block === 0 ? (
                         <span className="text">
                           <i className="bi bi-circle-fill p-1 ok"></i>
                           Bình thường
