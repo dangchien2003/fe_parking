@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const loadNotify = () => {
-  return "Duyệt tiền tự động đã dừng hoạt động vì ngân hàng chặn IP máy chủ";
+  return "Tính năng duyệt tiền tự động chỉ hoạt động vào ban ngày";
 };
 function Notify() {
   const [notifis, setNotifis] = useState(loadNotify);
