@@ -65,6 +65,7 @@ function AddCash() {
         window.toastSuccess("Số dư sẽ được cộng sau ít phút");
         setDenominationsNum(0);
         setDenominationsStr("");
+        setContentQr(randomString(15));
       })
       .catch((error) => {
         console.log(error);
