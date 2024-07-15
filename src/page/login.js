@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { delToken, getCookie } from "../helper/cookie";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("chienboy03@gmail.com");
@@ -15,7 +17,8 @@ function Login() {
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
   const [typePasword, setTypePasword] = useState("password");
-
+  const clientId = process.env.REACT_APP_CLIENTID;
+  const host = process.env.REACT_APP_BE;
   useEffect(() => {
     if (getCookie("logout") === "true") {
       delToken("customer");
@@ -40,7 +43,7 @@ function Login() {
     const run = async () => {
       if (countLogin > 0 && !errorEmail && !errorPassword) {
         setLoading(true);
-        let host = process.env.REACT_APP_BE;
+
         fetch(`${host}/customer/login`, {
           method: "POST",
           credentials: "include",
@@ -59,45 +62,12 @@ function Login() {
           })
           .then((data) => {
             if (data.success === false) {
-              let errorMessage = "";
-              switch (data.message.error) {
-                case "Incorrect password":
-                  errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
-                  break;
-                case "Email not exist":
-                  errorMessage = "Email không tồn tại";
-                  break;
-                case "Unverified account":
-                  errorMessage = "Tài khoản chưa được xác thực";
-                  break;
-                default:
-                  errorMessage = "Lỗi không xác định";
-              }
-              if (!!data.message.password) {
-                errorMessage = data.message.password;
-              }
-              if (!!data.message.email) {
-                errorMessage = data.message.email;
-              }
-              setErrorPassword(errorMessage);
+              handleDisplayError(data);
               return;
             }
 
             // client set cookie
-            if (data.cookies) {
-              for (var key in data.cookies) {
-                if (!data.cookies[key]) {
-                  continue;
-                }
-                const value = data.cookies[key].split("->MA");
-                if (value.length < 2 || isNaN(value[1])) {
-                  continue;
-                }
-                document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
-              }
-            }
-            // ok
-            window.location.href = "/";
+            handleLoginOK(data);
           })
           .catch(() => {
             setErrorPassword("Yêu cầu thất bại");
@@ -109,6 +79,50 @@ function Login() {
     };
     run();
   }, [countLogin]);
+
+  const handleLoginOK = (data) => {
+    if (data.cookies) {
+      for (var key in data.cookies) {
+        if (!data.cookies[key]) {
+          continue;
+        }
+        const value = data.cookies[key].split("->MA");
+        if (value.length < 2 || isNaN(value[1])) {
+          continue;
+        }
+        document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
+      }
+    }
+    // ok
+    window.location.href = "/";
+  };
+
+  const handleDisplayError = (data) => {
+    let errorMessage = "";
+    switch (data.message.error) {
+      case "Incorrect password":
+        errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
+        break;
+      case "Email not exist":
+        errorMessage = "Email không tồn tại";
+        break;
+      case "Unverified account":
+        errorMessage = "Tài khoản chưa được xác thực";
+        break;
+      case "Account has been locked":
+        errorMessage = "Tài khoản đã bị khoá";
+        break;
+      default:
+        errorMessage = "Lỗi không xác định";
+    }
+    if (!!data.message.password) {
+      errorMessage = data.message.password;
+    }
+    if (!!data.message.email) {
+      errorMessage = data.message.email;
+    }
+    setErrorPassword(errorMessage);
+  };
 
   const handleLogin = () => {
     if (!isEmail(email)) {
@@ -150,6 +164,45 @@ function Login() {
       setTypePasword("password");
       clearTimeout(idTimeOut);
     }, 3000);
+  };
+
+  const onLoginSuccess = (credentialResponse) => {
+    const token = credentialResponse.credential;
+    axios
+      .post(
+        `${host}/customer/login/google`,
+        { googleToken: token },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        handleLoginOK(response.data);
+      })
+      .catch((error) => {
+        if (!error.status) {
+          setErrorPassword("Có lỗi xảy ra");
+          return;
+        }
+        handleDisplayError(error.response.data);
+      });
+  };
+  const onLoginError = (e) => {
+    console.log(e);
+  };
+
+  const login = useGoogleLogin({
+    onSuccess: onLoginSuccess,
+    onError: onLoginError,
+  });
+
+  const click = (e) => {
+    console.log("object");
+    document.querySelectorAll(".g-signin2").forEach((element) => {
+      element.addEventListener("click", () => {
+        console.log("GoogleLogin button clicked.");
+      });
+    });
   };
 
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
@@ -239,6 +292,33 @@ function Login() {
           >
             Đăng nhập
           </button>
+          <div
+            className="login-side-three"
+            style={{ margin: "0 auto" }}
+            onClick={login}
+          >
+            <GoogleLogin
+              onChange={click}
+              onSuccess={onLoginSuccess}
+              onError={onLoginError}
+              clientId={clientId}
+              style={{ width: "100%" }}
+              render={(renderProps) => (
+                <button
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                  className="custom-google-button"
+                >
+                  <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    alt="Google logo"
+                    className="google-logo"
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                </button>
+              )}
+            />
+          </div>
         </form>
         {loading && <LoadingCircle width="50px" center />}
       </div>
