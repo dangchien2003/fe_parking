@@ -6,6 +6,7 @@ import { formatMoney } from "../helper/number";
 import { convertTimeStamp, getNowTimestamp } from "../helper/time";
 import RenderQr from "../components/code/render-qr-code";
 import ActionCode from "../components/code/action-code";
+import RenderAddress from "../components/code/address-bot";
 
 function InfoQr() {
   const { qrid } = useParams();
@@ -88,10 +89,7 @@ function InfoQr() {
                     {convertTimeStamp(info.expireAt, "HH:mm:ss DD/MM/yyy")}
                   </span>
                 </div>
-                <div>
-                  <span>Địa điểm: </span>
-                  <span>{info.address}</span>
-                </div>
+                <RenderAddress botId={info.botId} />
               </div>
               <div className="col-sm-4 group">
                 <div>
