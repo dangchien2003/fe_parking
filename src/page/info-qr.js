@@ -88,6 +88,10 @@ function InfoQr() {
                     {convertTimeStamp(info.expireAt, "HH:mm:ss DD/MM/yyy")}
                   </span>
                 </div>
+                <div>
+                  <span>Địa điểm: </span>
+                  <span>{info.address}</span>
+                </div>
               </div>
               <div className="col-sm-4 group">
                 <div>
@@ -134,7 +138,7 @@ function InfoQr() {
         <div id="plate">
           <div>
             <div className="show">
-              <h5 className="text-center">Biển nhập</h5>
+              <h5 className="text-center">Biển vào</h5>
               {info.checkinAt ? (
                 <div>
                   <div>
@@ -152,7 +156,7 @@ function InfoQr() {
           </div>
           <div>
             <div className="show">
-              <h5 className="text-center">Biển xuất</h5>
+              <h5 className="text-center">Biển ra</h5>
               {info.checkoutAt ? (
                 <div>
                   <div>

@@ -172,7 +172,7 @@ function AddCash() {
           </div>
           <div className="col-lg-5" id="qr">
             <div>
-              <div className="tittle text-center fs-3 pt-2">Quét tôi đi</div>
+              <div className="tittle text-center fs-3 pt-2">QR thanh toán</div>
               <div className="img-qr">
                 {denominationsNum >= 10000 && contentQr.length > 0 && (
                   <img
