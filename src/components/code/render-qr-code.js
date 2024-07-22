@@ -2,6 +2,7 @@ import QRCode from "qrcode.react";
 import { renderNewQr } from "../../helper/canvas";
 import { useEffect, useState } from "react";
 import { LoadingCircle } from "../loading/loading-circle";
+import { getContentQr } from "../../helper/convert-error";
 
 function RenderQr({ qrid }) {
   const [loaded, setLoaded] = useState(false);
@@ -15,26 +16,12 @@ function RenderQr({ qrid }) {
     })
       .then((response) => response.json())
       .then((dataRes) => {
-        if (dataRes.success) {
+        if (dataRes.status === 200) {
           setContent(dataRes.data);
           return;
         }
 
-        let message = "";
-        if (dataRes.message.error === "expired") {
-          message = "Mã đã hết hạn";
-        } else if (dataRes.message.error === "Checkouted") {
-          message = "Mã đã hết lượt sử dụng";
-        } else if (dataRes.message.error === "Cancled") {
-          message = "Mã đã huỷ";
-        } else if (
-          dataRes.message.error === "Not found" ||
-          dataRes.message.error === "Invalid qr"
-        ) {
-          message = "Mã không tồn tại";
-        } else {
-          message = dataRes.message.error;
-        }
+        let message = getContentQr[dataRes.message] || "Lỗi không xác định";
 
         throw new Error(message);
       })

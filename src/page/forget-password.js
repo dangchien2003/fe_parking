@@ -45,7 +45,7 @@ function ForgetPassword() {
             return response.json();
           })
           .then((data) => {
-            if (data.success === false) {
+            if (data.status !== 200) {
               let errorMessage = "";
               switch (data.message.error) {
                 case "Incorrect password":

@@ -7,7 +7,7 @@ async function authen() {
     });
 
     const dataRes = await response.json();
-    if (!dataRes || dataRes.success !== true) {
+    if (!dataRes || dataRes.status !== 200) {
       window.location.href = `/login`;
     }
   } catch (error) {

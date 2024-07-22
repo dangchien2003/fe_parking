@@ -3,6 +3,7 @@ import Header from "../components/header/header";
 import { formatMoney } from "../helper/number";
 import LoadingShop from "../components/loading/loading-shop";
 import { formatSeconds } from "../helper/time";
+import { buyCode } from "../helper/convert-error";
 
 function Shop() {
   const [shop, setShop] = useState([]);
@@ -13,7 +14,6 @@ function Shop() {
       calling.current = true;
       const qrCategory = e.target.getAttribute("id");
       if (!qrCategory.trim()) {
-        console.log(qrCategory);
         window.toastError("Lỗi lấy mã vé");
         return;
       }
@@ -31,34 +31,13 @@ function Shop() {
         .then((response) => response.json())
         .then((dataRes) => {
           // ok
-          if (dataRes.success) {
+          if (dataRes.status === 201) {
             window.toastSuccess("Mua vé thành công");
             window.diffRemaining(dataRes.data.price);
             return;
           }
-
-          // error
-          if (dataRes.message.error) {
-            let error = "";
-            switch (dataRes.message.error) {
-              case "Qr not exist":
-                error = "Mã không còn tồn tại";
-                break;
-              case "The balance is not enough, please add more money":
-                error = "Số dư không đủ";
-                break;
-              default:
-                error = "Lỗi không xác định";
-                break;
-            }
-            window.toastError(error);
-            return;
-          }
-
-          if (dataRes.message.qrCategory) {
-            window.toastError(`QrCategory ${dataRes.message.qrCategory}`);
-            return;
-          }
+          let message = buyCode[dataRes.message] || "Lỗi không xác định";
+          window.toastError(message);
         })
         .catch((err) => {
           console.log(err);
@@ -116,7 +95,7 @@ function Shop() {
 
       const dataRes = await response.json();
 
-      if (dataRes.success) {
+      if (dataRes.status === 200) {
         renderShop(dataRes.data);
       }
       setRenderOK(true);

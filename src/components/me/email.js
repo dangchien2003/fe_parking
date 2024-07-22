@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import isEmail from "../../valid/email";
 import { LoadingCircle } from "../loading/loading-circle";
+import { changeEmail } from "../../helper/convert-error";
 
 function Email({ email }) {
   const [change, setChange] = useState(false);
@@ -24,19 +25,9 @@ function Email({ email }) {
       })
         .then((response) => response.json())
         .then((dataRes) => {
-          if (!dataRes.success) {
-            let error = "";
-            switch (dataRes.message.error) {
-              case "Email must not same":
-                error = "Email không được trùng nhau";
-                break;
-              case "Email already exists":
-                error = "Email đã tồn tại trên hệ thống";
-                break;
-              default:
-                error = "Lỗi không xác định";
-            }
-            setErrorChangeEmail(error);
+          if (!dataRes.status === 200) {
+            let message = changeEmail[dataRes.message] || "Lỗi không xác định";
+            setErrorChangeEmail(message);
             return;
           }
           // ok

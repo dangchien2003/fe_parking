@@ -55,9 +55,9 @@ function AddCash() {
     })
       .then((response) => response.json())
       .then((dataRes) => {
-        if (!dataRes.success) {
-          if (dataRes.message.money) {
-            window.toastError("Mệnh giá nạp phải trên 10.000đ");
+        if (dataRes.status !== 201) {
+          if (dataRes.message) {
+            window.toastError(dataRes.message);
             return;
           }
           throw new Error("Lỗi không xác định");

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getNowTimestamp, convertTimeStamp } from "../../helper/time";
 import { LoadingCircle } from "../loading/loading-circle";
-import { extendCodeError } from "../../helper/convert-error";
+import { cancleCode, extendCodeError } from "../../helper/convert-error";
 import { formatMoney } from "../../helper/number";
 const today = () => {
   const now = getNowTimestamp();
@@ -30,28 +30,15 @@ function ActionCode({ info, onCancleOk }) {
       );
 
       const dataRes = await response.json();
-      if (dataRes.success) {
+      if (dataRes.status === 200) {
         window.toastSuccess("Huỷ thành công");
         setCancled(true);
         onCancleOk();
         return;
       }
 
-      let message = "";
-      switch (dataRes.message.error) {
-        case "Invalid code":
-          message = "Mã vé không đúng";
-          break;
-        case "Code not exist":
-          message = "Mã không tồn tại";
-          break;
-        case "Cannot cancle":
-          message = "Không thể huỷ";
-          break;
-        default:
-          message = "Lỗi không xác định";
-      }
-      window.toastError(message);
+      let message = cancleCode[dataRes.message];
+      window.toastError(message || "Lỗi không xác định");
     } catch (error) {
       //   setLoaded(true);
     }
@@ -94,15 +81,12 @@ function ActionCode({ info, onCancleOk }) {
     )
       .then((response) => response.json())
       .then((dataRes) => {
-        if (dataRes.success) {
+        if (dataRes.status === 200) {
           setTotalExtend(formatMoney(dataRes.data.price));
           setGetPrice(true);
           return;
         }
-        let message = extendCodeError[dataRes.message.error];
-        if (!message) {
-          message = "Lỗi không xác định";
-        }
+        let message = extendCodeError[dataRes.message] || "Lỗi không xác định";
         setMessage(message);
       })
       .catch(() => {
@@ -130,17 +114,14 @@ function ActionCode({ info, onCancleOk }) {
     )
       .then((response) => response.json())
       .then((dataRes) => {
-        if (dataRes.success) {
+        if (dataRes.status === 200) {
           window.toastSuccess("Gia hạn thành công");
           setTimeout(() => {
             window.location.reload();
           }, 2000);
           return;
         }
-        let message = extendCodeError[dataRes.message.error];
-        if (!message) {
-          message = "Lỗi không xác định";
-        }
+        let message = cancleCode[dataRes.message] || "Lỗi không xác định";
         setMessage(message);
         setCalling(false);
       })

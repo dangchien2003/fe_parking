@@ -22,8 +22,8 @@ function MyInfo() {
         );
 
         const dataRes = await response.json();
-        if (!dataRes.success) {
-          throw new Error(dataRes.message.error);
+        if (dataRes.status !== 200) {
+          throw new Error("Lỗi lấy thông tin");
         }
         setInfo(dataRes.data);
       } catch (error) {

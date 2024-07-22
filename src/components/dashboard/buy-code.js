@@ -26,7 +26,7 @@ function HistoryBuyCode() {
 
         if (response.ok) {
           const dataRes = await response.json();
-          if (dataRes.success) {
+          if (dataRes.status === 200) {
             setHistory(dataRes.data);
             setQuantityBought(dataRes.data.length);
           }

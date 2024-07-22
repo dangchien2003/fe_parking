@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
+import { acceptForget } from "../helper/convert-error";
 function AcceptForget() {
   const { token } = useParams();
   const [loading, setLoading] = useState(false);
@@ -31,14 +32,9 @@ function AcceptForget() {
       .then(async (response) => await response.json())
       .then((dataRes) => {
         setLoading(false);
-        if (!dataRes.success) {
-          switch (dataRes.message.error) {
-            case "Invalid token":
-              setErrorAccept("Phiên không hợp lệ hoặc đã hết hạn");
-              break;
-            default:
-              setErrorAccept(dataRes.message.error);
-          }
+        if (!dataRes.status === 200) {
+          let message = acceptForget[dataRes.message] || "Lỗi không xác định";
+          setErrorAccept(message);
         } else {
           setAcceptOK(true);
           setErrorAccept("");

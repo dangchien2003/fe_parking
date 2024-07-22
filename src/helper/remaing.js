@@ -6,7 +6,7 @@ async function callRemaining() {
       credentials: "include",
     });
     const dataRes = await response.json();
-    if (dataRes.success === true) {
+    if (dataRes.status === 200) {
       document.cookie = `remaining=${dataRes.data.remaining};3600;Path=/`;
       return dataRes.data.remaining;
     }

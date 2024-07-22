@@ -6,6 +6,7 @@ import {
   checkSamePassword,
 } from "../../helper/password";
 import { LoadingCircle } from "../loading/loading-circle";
+import { changePassword } from "../../helper/convert-error";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -40,7 +41,7 @@ function ChangePassword() {
         );
         const dataRes = await response.json();
 
-        if (dataRes.success) {
+        if (dataRes.status === 200) {
           // set default data
           setOldPassword("");
           setNewPassword("");
@@ -62,7 +63,8 @@ function ChangePassword() {
           );
           return;
         }
-        setMessage(dataRes.message.error);
+        let message = changePassword[dataRes.message] || "Lỗi không xác định";
+        setMessage(message);
         setChangeOK(false);
       } catch (error) {
         setMessage("Có lỗi xảy ra");

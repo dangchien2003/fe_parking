@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
+import { acceptAccount } from "../helper/convert-error";
 
 function AcceptAccount() {
   const { token } = useParams();
@@ -18,25 +19,9 @@ function AcceptAccount() {
     })
       .then((response) => response.json())
       .then((dataRes) => {
-        if (!dataRes.success) {
-          let logMessage = "";
-          switch (dataRes.message.error) {
-            case "Token is null":
-              logMessage = "Không tồn tại mã xác thực";
-              break;
-            case "Invalid token":
-              logMessage = "Mã xác thực hết hiệu lực hoặc không tồn tại";
-              break;
-            case "Account not exist":
-              logMessage = "Tài khoản không tồn tại";
-              break;
-            case "Account accepted":
-              logMessage = "Tài khoản đã được xác thực trước đó";
-              break;
-            default:
-              logMessage = "Lỗi không xác định";
-          }
-          setMessage(logMessage);
+        if (!dataRes.status === 200) {
+          let message = acceptAccount[dataRes.message] || "Lỗi không xác định";
+          setMessage(message);
         }
       })
       .catch((error) => {

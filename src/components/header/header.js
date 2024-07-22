@@ -29,7 +29,7 @@ function Header() {
         })
           .then((response) => response.json())
           .then((dataRes) => {
-            if (!dataRes.success) {
+            if (!dataRes.status === 200) {
               throw new Error("Success is false");
             }
             // client set cookie

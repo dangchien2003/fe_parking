@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { delToken, getCookie } from "../helper/cookie";
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { login } from "../helper/convert-error";
 
 function Login() {
   const [email, setEmail] = useState("chienboy03@gmail.com");
@@ -61,8 +62,9 @@ function Login() {
             return response.json();
           })
           .then((data) => {
-            if (data.success === false) {
-              handleDisplayError(data);
+            if (data.status !== 200) {
+              let message = login[data.message] || "Lỗi không xác định";
+              setErrorPassword(message);
               return;
             }
 
@@ -95,33 +97,6 @@ function Login() {
     }
     // ok
     window.location.href = "/";
-  };
-
-  const handleDisplayError = (data) => {
-    let errorMessage = "";
-    switch (data.message.error) {
-      case "Incorrect password":
-        errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
-        break;
-      case "Email not exist":
-        errorMessage = "Email không tồn tại";
-        break;
-      case "Unverified account":
-        errorMessage = "Tài khoản chưa được xác thực";
-        break;
-      case "Account has been locked":
-        errorMessage = "Tài khoản đã bị khoá";
-        break;
-      default:
-        errorMessage = "Lỗi không xác định";
-    }
-    if (!!data.message.password) {
-      errorMessage = data.message.password;
-    }
-    if (!!data.message.email) {
-      errorMessage = data.message.email;
-    }
-    setErrorPassword(errorMessage);
   };
 
   const handleLogin = () => {
@@ -177,24 +152,19 @@ function Login() {
         }
       )
       .then((response) => {
+        if (response.status !== 200) {
+          let message = login[response.message] || "Lỗi không xác định";
+          setErrorPassword(message);
+        }
         handleLoginOK(response.data);
       })
       .catch((error) => {
-        if (!error.status) {
-          setErrorPassword("Có lỗi xảy ra");
-          return;
-        }
-        handleDisplayError(error.response.data);
+        setErrorPassword("Có lỗi xảy ra");
       });
   };
   const onLoginError = (e) => {
     console.log(e);
   };
-
-  const login = useGoogleLogin({
-    onSuccess: onLoginSuccess,
-    onError: onLoginError,
-  });
 
   const click = (e) => {
     console.log("object");

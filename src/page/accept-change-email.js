@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
+import { acceptChangeEmail } from "../helper/convert-error";
 
 function AcceptChangeEmail() {
   const { token } = useParams();
@@ -18,22 +19,10 @@ function AcceptChangeEmail() {
     })
       .then((response) => response.json())
       .then((dataRes) => {
-        if (!dataRes.success) {
-          let logMessage = "";
-          switch (dataRes.message.error) {
-            case "Invalid token":
-              logMessage = "Phiên đã hết hạn hoặc không tồn tại";
-              break;
-            case "Account not exist":
-              logMessage = "Tài khoản không tồn tại";
-              break;
-            case "Session has ended":
-              logMessage = "Phiên không còn hiệu lực";
-              break;
-            default:
-              logMessage = "Lỗi không xác định";
-          }
-          setMessage(logMessage);
+        if (!dataRes.status === 200) {
+          let message =
+            acceptChangeEmail[dataRes.message] || "Lỗi không xác định";
+          setMessage(message);
         }
       })
       .catch((error) => {

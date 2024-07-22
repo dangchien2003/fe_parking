@@ -10,7 +10,7 @@ function RenderAddress({ botId }) {
         withCredentials: true,
       })
       .then((response) => {
-        setAddress(response.data.data.address);
+        setAddress(response.data.data.bot.address);
       })
       .catch((error) => {
         console.log(error);

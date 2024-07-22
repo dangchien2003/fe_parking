@@ -59,7 +59,7 @@ function Register() {
             return response.json();
           })
           .then((data) => {
-            if (data.success === false) {
+            if (data.status !== 201) {
               let errorMessage = "";
               switch (data.message.error) {
                 case "Email already exist":

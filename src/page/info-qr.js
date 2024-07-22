@@ -22,8 +22,9 @@ function InfoQr() {
     })
       .then((response) => response.json())
       .then((dataRes) => {
-        if (dataRes.success) {
+        if (dataRes.status === 200) {
           setInfo(dataRes.data);
+          console.log(dataRes.data);
           return;
         }
         window.toastError("Có lỗi xảy ra");
@@ -89,7 +90,11 @@ function InfoQr() {
                     {convertTimeStamp(info.expireAt, "HH:mm:ss DD/MM/yyy")}
                   </span>
                 </div>
-                <RenderAddress botId={info.botId} />
+                <div>
+                  <span>Địa điểm: </span>
+                  <span>{info.bot && info.bot.address}</span>
+                </div>
+                {/* <RenderAddress botId={info.botId} /> */}
               </div>
               <div className="col-sm-4 group">
                 <div>

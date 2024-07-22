@@ -14,7 +14,7 @@ function HistoryDeposit() {
       })
         .then((response) => response.json())
         .then((dataRes) => {
-          if (!dataRes.success) {
+          if (!dataRes.status === 200) {
             return;
           }
           setHistory(dataRes.data);
