@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import isEmail from "../../valid/email";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changeEmail } from "../../helper/convert-error";
+import axios from "axios";
+import { getItem } from "../../helper/sessionStorage";
 
 function Email({ email }) {
   const [change, setChange] = useState(false);
@@ -13,19 +15,23 @@ function Email({ email }) {
 
   useEffect(() => {
     if (checkOk) {
-      fetch(`${process.env.REACT_APP_BE}/customer/change-email`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          newEmail: newEmail,
-        }),
-      })
-        .then((response) => response.json())
-        .then((dataRes) => {
-          if (!dataRes.status === 200) {
+      axios
+        .post(
+          `${process.env.REACT_APP_BE}/api/customer/change-email`,
+          {
+            newEmail: newEmail,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: getItem("CToken"),
+            },
+          }
+        )
+        .then((response) => {
+          const dataRes = response.data;
+          if (response.status !== 200) {
             let message = changeEmail[dataRes.message] || "Lỗi không xác định";
             setErrorChangeEmail(message);
             return;
@@ -42,6 +48,7 @@ function Email({ email }) {
           setLoading(false);
           setCheckOk(false);
         });
+
       setLoading(true);
     }
   }, [checkOk]);

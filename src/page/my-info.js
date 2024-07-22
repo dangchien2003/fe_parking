@@ -6,6 +6,8 @@ import LoadingLineRun from "../components/loading/loading-line-run";
 import { convertTimeStamp } from "../helper/time";
 import { diffTime, formatDays } from "../helper/time";
 import Email from "../components/me/email";
+import { getItem } from "../helper/sessionStorage";
+import axios from "axios";
 function MyInfo() {
   const [info, setInfo] = useState(null);
   const [errorFetch, setErrorFetch] = useState("");
@@ -13,16 +15,16 @@ function MyInfo() {
   useEffect(() => {
     const myInfo = async () => {
       try {
-        const response = await fetch(
-          process.env.REACT_APP_BE + "/customer/me",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const host = process.env.REACT_APP_BE;
+        const response = await axios.get(`${host}/api/customer/me`, {
+          headers: {
+            Authorization: getItem("CToken"),
+          },
+          withCredentials: true,
+        });
 
-        const dataRes = await response.json();
-        if (dataRes.status !== 200) {
+        const dataRes = response.data;
+        if (response.status !== 200) {
           throw new Error("Lỗi lấy thông tin");
         }
         setInfo(dataRes.data);
@@ -33,6 +35,7 @@ function MyInfo() {
         setLoading(false);
       }
     };
+
     myInfo();
   }, []);
   return (

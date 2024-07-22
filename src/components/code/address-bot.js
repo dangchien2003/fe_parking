@@ -1,13 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { getItem } from "../../helper/sessionStorage";
 
 function RenderAddress({ botId }) {
   const [address, setAddress] = useState("");
   useEffect(() => {
     if (!botId) return;
     axios
-      .get(`${process.env.REACT_APP_BE}/customer/bot/i?bot=${botId}`, {
+      .get(`${process.env.REACT_APP_BE}/api/customer/bot/i`, {
         withCredentials: true,
+        params: {
+          bot: botId,
+        },
+        headers: {
+          Authorization: getItem("CToken"),
+        },
       })
       .then((response) => {
         setAddress(response.data.data.bot.address);

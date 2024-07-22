@@ -1,14 +1,19 @@
+import axios from "axios";
+import { getItem } from "./sessionStorage";
+
 async function callRemaining() {
   const hostBE = process.env.REACT_APP_BE;
   try {
-    const response = await fetch(`${hostBE}/customer/cash/remaining`, {
-      method: "GET",
-      credentials: "include",
+    const response = await axios.get(`${hostBE}/api/customer/cash/remaining`, {
+      withCredentials: true,
+      headers: {
+        Authorization: getItem("CToken"),
+      },
     });
-    const dataRes = await response.json();
-    if (dataRes.status === 200) {
-      document.cookie = `remaining=${dataRes.data.remaining};3600;Path=/`;
-      return dataRes.data.remaining;
+
+    if (response.status === 200) {
+      document.cookie = `remaining=${response.data.data.remaining}; max-age=3600; path=/`;
+      return response.data.data.remaining;
     }
   } catch (error) {
     console.log("error call " + error);

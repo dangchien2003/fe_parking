@@ -3,6 +3,8 @@ import { formatMoney } from "../../helper/number";
 import RenderListBougthQr from "./render-list-bougth-qr";
 import LoadingLineRun from "../loading/loading-line-run";
 import { getNowTimestamp } from "../../helper/time";
+import { getItem } from "../../helper/sessionStorage";
+import axios from "axios";
 
 function HistoryBuyCode() {
   const [quantityBought, setQuantityBought] = useState(0);
@@ -16,26 +18,26 @@ function HistoryBuyCode() {
   useEffect(() => {
     const loadQuantityBought = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BE}/customer/code/bought`,
+        const response = await axios.get(
+          `${process.env.REACT_APP_BE}/api/customer/code/bought`,
           {
-            method: "GET",
-            credentials: "include",
+            withCredentials: true,
+            headers: {
+              Authorization: getItem("CToken"),
+            },
           }
         );
 
-        if (response.ok) {
-          const dataRes = await response.json();
-          if (dataRes.status === 200) {
-            setHistory(dataRes.data);
-            setQuantityBought(dataRes.data.length);
-          }
-          setLoaded(true);
+        if (response.status === 200) {
+          setHistory(response.data.data);
+          setQuantityBought(response.data.data.length);
         }
+        setLoaded(true);
       } catch (error) {
         setLoaded(true);
       }
     };
+
     loadQuantityBought();
   }, []);
 

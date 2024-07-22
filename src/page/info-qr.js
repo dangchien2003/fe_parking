@@ -7,6 +7,8 @@ import { convertTimeStamp, getNowTimestamp } from "../helper/time";
 import RenderQr from "../components/code/render-qr-code";
 import ActionCode from "../components/code/action-code";
 import RenderAddress from "../components/code/address-bot";
+import axios from "axios";
+import { getItem } from "../helper/sessionStorage";
 
 function InfoQr() {
   const { qrid } = useParams();
@@ -16,25 +18,33 @@ function InfoQr() {
   const [info, setInfo] = useState({});
   const [ticketCancled, setTicketCancled] = useState(0);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BE}/customer/code/i?qrid=${qrid}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (dataRes.status === 200) {
-          setInfo(dataRes.data);
-          console.log(dataRes.data);
-          return;
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BE}/api/customer/code/i`,
+          {
+            params: { qrid },
+            withCredentials: true,
+            headers: {
+              Authorization: getItem("CToken"),
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setInfo(response.data.data);
+          console.log(response.data.data);
+        } else {
+          window.toastError("Có lỗi xảy ra");
         }
-        window.toastError("Có lỗi xảy ra");
-      })
-      .catch((error) => {
+      } catch (error) {
         setLoadError(true);
-      })
-      .finally(() => {
+      } finally {
         setLoaded(true);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleRenderQr = () => {

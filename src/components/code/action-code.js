@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { getNowTimestamp, convertTimeStamp } from "../../helper/time";
-import { LoadingCircle } from "../loading/loading-circle";
 import { cancleCode, extendCodeError } from "../../helper/convert-error";
 import { formatMoney } from "../../helper/number";
+import { getItem } from "../../helper/sessionStorage";
+import axios from "axios";
 const today = () => {
   const now = getNowTimestamp();
   return convertTimeStamp(now, "yyyy-MM-DD");
@@ -20,27 +21,38 @@ function ActionCode({ info, onCancleOk }) {
   const [callingExtend, setCallingExtend] = useState(false);
 
   const handleCancleCode = async () => {
+    if (calling) {
+      window.toastError("Thao tác chậm lại");
+      return;
+    }
+    setCalling(true);
+    setMessage("");
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BE}/customer/code/cancle?id=${info.qrid}`,
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BE}/api/customer/code/cancle`,
+        null,
         {
-          method: "PATCH",
-          credentials: "include",
+          params: {
+            id: info.qrid,
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: getItem("CToken"),
+          },
         }
       );
 
-      const dataRes = await response.json();
-      if (dataRes.status === 200) {
+      if (response.status === 200) {
         window.toastSuccess("Huỷ thành công");
         setCancled(true);
         onCancleOk();
-        return;
+      } else {
+        let message = cancleCode[response.data.message] || "Lỗi không xác định";
+        setMessage(message);
       }
-
-      let message = cancleCode[dataRes.message];
-      window.toastError(message || "Lỗi không xác định");
     } catch (error) {
-      //   setLoaded(true);
+      setMessage("Có lỗi xảy ra");
+      setCalling(false);
     }
   };
 
@@ -65,39 +77,44 @@ function ActionCode({ info, onCancleOk }) {
     setGetPrice(false);
   };
 
-  const handleGetPriceExtend = () => {
+  const handleGetPriceExtend = async () => {
     if (callingExtend) {
       window.toastError("Thao tác chậm lại");
       return;
     }
     handleClearData();
     setCallingExtend(true);
-    fetch(
-      `${process.env.REACT_APP_BE}/customer/code/extend/price/${info.qrid}?date=${date}&time=${valueSelectTime}`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    )
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (dataRes.status === 200) {
-          setTotalExtend(formatMoney(dataRes.data.price));
-          setGetPrice(true);
-          return;
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BE}/api/customer/code/extend/price/${info.qrid}`,
+        {
+          params: {
+            date: date,
+            time: valueSelectTime,
+          },
+          withCredentials: true,
+          headers: {
+            Authorization: getItem("CToken"),
+          },
         }
-        let message = extendCodeError[dataRes.message] || "Lỗi không xác định";
+      );
+
+      if (response.status === 200) {
+        setTotalExtend(formatMoney(response.data.price));
+        setGetPrice(true);
+      } else {
+        let message =
+          extendCodeError[response.data.message] || "Lỗi không xác định";
         setMessage(message);
-      })
-      .catch(() => {
-        setMessage("Có lỗi xảy ra");
-      })
-      .finally(() => {
-        setCallingExtend(false);
-      });
+      }
+    } catch (error) {
+      setMessage("Có lỗi xảy ra");
+    } finally {
+      setCallingExtend(false);
+    }
   };
 
-  const handleBuyTicket = () => {
+  const handleExtendTicket = async () => {
     if (calling) {
       window.toastError("Thao tác chậm lại");
       return;
@@ -105,30 +122,34 @@ function ActionCode({ info, onCancleOk }) {
 
     setCalling(true);
     setMessage("");
-    fetch(
-      `${process.env.REACT_APP_BE}/customer/code/extend/${info.qrid}?date=${date}&time=${valueSelectTime}`,
-      {
-        method: "PATCH",
-        credentials: "include",
-      }
-    )
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (dataRes.status === 200) {
-          window.toastSuccess("Gia hạn thành công");
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-          return;
+
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BE}/api/customer/code/extend/${info.qrid}`,
+        null,
+        {
+          params: {
+            date: date,
+            time: valueSelectTime,
+          },
+          withCredentials: true,
         }
-        let message = cancleCode[dataRes.message] || "Lỗi không xác định";
+      );
+
+      if (response.status === 200) {
+        window.toastSuccess("Gia hạn thành công");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        let message = cancleCode[response.data.message] || "Lỗi không xác định";
         setMessage(message);
         setCalling(false);
-      })
-      .catch(() => {
-        setMessage("Có lỗi xảy ra");
-        setCalling(false);
-      });
+      }
+    } catch (error) {
+      setMessage("Có lỗi xảy ra");
+      setCalling(false);
+    }
   };
 
   return (
@@ -188,7 +209,7 @@ function ActionCode({ info, onCancleOk }) {
               <button
                 type="button"
                 class="btn btn-success"
-                onClick={handleBuyTicket}
+                onClick={handleExtendTicket}
               >
                 Mua vé
               </button>

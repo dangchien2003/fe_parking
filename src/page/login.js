@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
-import { delToken, getCookie } from "../helper/cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { login } from "../helper/convert-error";
+import { setItem } from "../helper/sessionStorage";
 
 function Login() {
   const [email, setEmail] = useState("chienboy03@gmail.com");
@@ -20,11 +20,6 @@ function Login() {
   const [typePasword, setTypePasword] = useState("password");
   const clientId = process.env.REACT_APP_CLIENTID;
   const host = process.env.REACT_APP_BE;
-  useEffect(() => {
-    if (getCookie("logout") === "true") {
-      delToken("customer");
-    }
-  }, []);
 
   useEffect(() => {
     setHeightForm(document.getElementById("form").offsetHeight);
@@ -45,7 +40,7 @@ function Login() {
       if (countLogin > 0 && !errorEmail && !errorPassword) {
         setLoading(true);
 
-        fetch(`${host}/customer/login`, {
+        fetch(`${host}/api/customer/login`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -82,20 +77,21 @@ function Login() {
     run();
   }, [countLogin]);
 
-  const handleLoginOK = (data) => {
-    if (data.cookies) {
-      for (var key in data.cookies) {
-        if (!data.cookies[key]) {
-          continue;
-        }
-        const value = data.cookies[key].split("->MA");
-        if (value.length < 2 || isNaN(value[1])) {
-          continue;
-        }
-        document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
+  const handleLoginOK = (response) => {
+    const token = response.data.access_token;
+    const type = response.data.token_type;
+    const age = parseInt(response.data.expires_in, 10);
+    setItem("CToken", `${type} ${token}`, age);
+    for (var key in response.cookies) {
+      if (!response.cookies[key]) {
+        continue;
       }
+      const value = response.cookies[key].split("->MA");
+      if (value.length < 2 || isNaN(value[1])) {
+        continue;
+      }
+      document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
     }
-    // ok
     window.location.href = "/";
   };
 
@@ -144,13 +140,7 @@ function Login() {
   const onLoginSuccess = (credentialResponse) => {
     const token = credentialResponse.credential;
     axios
-      .post(
-        `${host}/customer/login/google`,
-        { googleToken: token },
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`${host}/api/customer/login/google`, { googleToken: token })
       .then((response) => {
         if (response.status !== 200) {
           let message = login[response.message] || "Lỗi không xác định";

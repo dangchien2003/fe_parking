@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { getParameterByName } from "../helper/url";
+import axios from "axios";
 function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
@@ -30,49 +31,52 @@ function ForgetPassword() {
       if (count > 0 && !errorEmail) {
         setLoading(true);
         let host = process.env.REACT_APP_BE;
-        fetch(`${host}/customer/forget`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-          }),
-        })
-          .then((response) => {
-            setLoading(false);
-            return response.json();
-          })
-          .then((data) => {
-            if (data.status !== 200) {
-              let errorMessage = "";
-              switch (data.message.error) {
-                case "Incorrect password":
-                  errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
-                  break;
-                case "Email not exist":
-                  errorMessage = "Email không tồn tại";
-                  break;
-                default:
-                  errorMessage = "Lỗi không xác định";
-              }
-              if (!!data.message.password) {
-                errorMessage = data.message.password;
-              }
-              if (!!data.message.email) {
-                errorMessage = data.message.email;
-              }
-              setErrorEmail(errorMessage);
-            } else {
-              setForget(true);
+
+        try {
+          const response = await axios.post(
+            `${host}/api/customer/forget`,
+            {
+              email: email,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
-          })
-          .catch(() => {
-            setErrorEmail("Yêu cầu thất bại");
-          });
+          );
+
+          setLoading(false);
+
+          const data = response.data;
+          if (response.status !== 200) {
+            let errorMessage = "";
+            switch (data.message.error) {
+              case "Incorrect password":
+                errorMessage = "Tài khoản hoặc mật khẩu không chính xác";
+                break;
+              case "Email not exist":
+                errorMessage = "Email không tồn tại";
+                break;
+              default:
+                errorMessage = "Lỗi không xác định";
+            }
+            if (!!data.message.password) {
+              errorMessage = data.message.password;
+            }
+            if (!!data.message.email) {
+              errorMessage = data.message.email;
+            }
+            setErrorEmail(errorMessage);
+          } else {
+            setForget(true);
+          }
+        } catch (error) {
+          setLoading(false);
+          setErrorEmail("Yêu cầu thất bại");
+        }
       }
     };
+
     run();
   }, [count]);
 

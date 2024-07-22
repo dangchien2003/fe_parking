@@ -4,12 +4,14 @@ import { formatMoney } from "../helper/number";
 import LoadingShop from "../components/loading/loading-shop";
 import { formatSeconds } from "../helper/time";
 import { buyCode } from "../helper/convert-error";
+import axios from "axios";
+import { getItem } from "../helper/sessionStorage";
 
 function Shop() {
   const [shop, setShop] = useState([]);
   const [renderOK, setRenderOK] = useState(false);
   const calling = useRef(false);
-  const buyTicket = (e) => {
+  const buyTicket = async (e) => {
     if (!calling.current) {
       calling.current = true;
       const qrCategory = e.target.getAttribute("id");
@@ -17,37 +19,33 @@ function Shop() {
         window.toastError("Lỗi lấy mã vé");
         return;
       }
-
-      fetch(`${process.env.REACT_APP_BE}/customer/code/buy`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          qrCategory: qrCategory,
-        }),
-      })
-        .then((response) => response.json())
-        .then((dataRes) => {
-          // ok
-          if (dataRes.status === 201) {
-            window.toastSuccess("Mua vé thành công");
-            window.diffRemaining(dataRes.data.price);
-            return;
-          }
-          let message = buyCode[dataRes.message] || "Lỗi không xác định";
-          window.toastError(message);
-        })
-        .catch((err) => {
-          console.log(err);
-          window.toastError("Có lỗi xảy ra");
-        })
-        .finally(() => {
-          calling.current = false;
-        });
-
       window.toastInfo("Đang tiến hành mua");
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_BE}/api/customer/code/buy`,
+          { qrCategory },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: getItem("CToken"),
+            },
+          }
+        );
+
+        if (response.status === 201) {
+          window.toastSuccess("Mua vé thành công");
+          window.diffRemaining(response.data.data.price);
+        } else {
+          let message = buyCode[response.data.message] || "Lỗi không xác định";
+          window.toastError(message);
+        }
+      } catch (err) {
+        console.log(err);
+        window.toastError("Có lỗi xảy ra");
+      } finally {
+        calling.current = false;
+      }
     }
   };
 
@@ -85,21 +83,21 @@ function Shop() {
       setShop(items);
     };
     const getShop = async () => {
-      const response = await fetch(
-        `${process.env.REACT_APP_BE}/customer/shop-qr/all`,
-        {
-          method: "GET",
-          credentials: "include",
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BE}/api/customer/shop-qr/all`
+        );
+
+        if (response.status === 200) {
+          renderShop(response.data.data);
         }
-      );
-
-      const dataRes = await response.json();
-
-      if (dataRes.status === 200) {
-        renderShop(dataRes.data);
+      } catch (error) {
+        console.error("Error fetching shop data:", error);
+      } finally {
+        setRenderOK(true);
       }
-      setRenderOK(true);
     };
+
     getShop();
   }, []);
   return (

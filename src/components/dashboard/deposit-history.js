@@ -2,28 +2,35 @@ import { useState, useEffect } from "react";
 import { formatMoney } from "../../helper/number";
 import RenderReposit from "./render-list-deposit";
 import LoadingLineRun from "../loading/loading-line-run";
+import axios from "axios";
+import { getItem } from "../../helper/sessionStorage";
 function HistoryDeposit() {
   const [history, setHistory] = useState([]);
   const [loaded, setLoading] = useState(false);
   const [totalDeposited, setTotalDeposited] = useState(formatMoney(0));
   useEffect(() => {
     const callHistory = async () => {
-      await fetch(`${process.env.REACT_APP_BE}/customer/cash/all`, {
-        method: "GET",
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((dataRes) => {
-          if (!dataRes.status === 200) {
-            return;
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BE}/api/customer/cash/all`,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: getItem("CToken"),
+            },
           }
-          setHistory(dataRes.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      setLoading(true);
+        );
+
+        if (response.status === 200) {
+          setHistory(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(true);
+      }
     };
+
     callHistory();
   }, []);
 

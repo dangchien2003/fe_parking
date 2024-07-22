@@ -7,6 +7,8 @@ import {
 } from "../../helper/password";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changePassword } from "../../helper/convert-error";
+import { getItem } from "../../helper/sessionStorage";
+import axios from "axios";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -23,25 +25,25 @@ function ChangePassword() {
   useEffect(() => {
     const callApiChangePassword = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BE}/customer/change-password`,
+        const response = await axios.patch(
+          `${process.env.REACT_APP_BE}/api/customer/change-password`,
           {
-            method: "PATCH",
-            credentials: "include",
+            oldPassword,
+            newPassword,
+            confirmPassword: acceptPassword,
+          },
+          {
+            withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer `,
+              Authorization: getItem("CToken"),
             },
-            body: JSON.stringify({
-              oldPassword,
-              newPassword,
-              confirmPassword: acceptPassword,
-            }),
           }
         );
-        const dataRes = await response.json();
 
-        if (dataRes.status === 200) {
+        const dataRes = response.data;
+
+        if (response.status === 200) {
           // set default data
           setOldPassword("");
           setNewPassword("");
@@ -63,6 +65,7 @@ function ChangePassword() {
           );
           return;
         }
+
         let message = changePassword[dataRes.message] || "Lỗi không xác định";
         setMessage(message);
         setChangeOK(false);

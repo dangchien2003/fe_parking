@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { acceptForget } from "../helper/convert-error";
+import axios from "axios";
 function AcceptForget() {
   const { token } = useParams();
   const [loading, setLoading] = useState(false);
@@ -26,13 +27,13 @@ function AcceptForget() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.REACT_APP_BE}/customer/forget/${token}`, {
-      method: "GET",
-    })
-      .then(async (response) => await response.json())
-      .then((dataRes) => {
+
+    axios
+      .get(`${process.env.REACT_APP_BE}/api/customer/forget/${token}`)
+      .then((response) => {
         setLoading(false);
-        if (!dataRes.status === 200) {
+        const dataRes = response.data;
+        if (dataRes.status !== 200) {
           let message = acceptForget[dataRes.message] || "Lỗi không xác định";
           setErrorAccept(message);
         } else {
@@ -41,9 +42,12 @@ function AcceptForget() {
         }
       })
       .catch((error) => {
+        setLoading(false);
         setErrorAccept("Lỗi không xác định");
+        console.log(error);
       });
   }, []);
+
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
   return (
     <div className="d-flex justify-content-center align-items-center">

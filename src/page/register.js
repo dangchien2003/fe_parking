@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
+import axios from "axios";
 
 const regexPasswords =
   /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
@@ -44,57 +45,58 @@ function Register() {
       ) {
         setLoading(true);
         let host = process.env.REACT_APP_BE;
-        fetch(`${host}/customer/register`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            if (data.status !== 201) {
-              let errorMessage = "";
-              switch (data.message.error) {
-                case "Email already exist":
-                  errorMessage = "Tài khoản email đã tồn tại";
-                  break;
-                case "must be a well-formed email address":
-                  errorMessage = "Email nhập không đúng";
-                  break;
-                case "size must be between 8 and 30":
-                  errorMessage = "Mật khẩu quá ngắn";
-                  break;
-                default:
-                  errorMessage = "Lỗi không xác định";
-              }
-              if (!!data.message.password) {
-                errorMessage = data.message.password;
-              }
-              if (!!data.message.email) {
-                errorMessage = data.message.email;
-              }
-              setErrorConfirmPassword(errorMessage);
-            } else {
-              setRegisterSuccess(true);
-              setPassword("");
-              setConfirmPassword("");
+
+        try {
+          const response = await axios.post(
+            `${host}/api/customer/register`,
+            {
+              email: email,
+              password: password,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
-          })
-          .catch(() => {
-            setErrorConfirmPassword("Yêu cầu thất bại");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+          );
+
+          const data = response.data;
+
+          if (response.status !== 201) {
+            let errorMessage = "";
+            switch (data.message.error) {
+              case "Email already exist":
+                errorMessage = "Tài khoản email đã tồn tại";
+                break;
+              case "must be a well-formed email address":
+                errorMessage = "Email nhập không đúng";
+                break;
+              case "size must be between 8 and 30":
+                errorMessage = "Mật khẩu quá ngắn";
+                break;
+              default:
+                errorMessage = "Lỗi không xác định";
+            }
+            if (data.message.password) {
+              errorMessage = data.message.password;
+            }
+            if (data.message.email) {
+              errorMessage = data.message.email;
+            }
+            setErrorConfirmPassword(errorMessage);
+          } else {
+            setRegisterSuccess(true);
+            setPassword("");
+            setConfirmPassword("");
+          }
+        } catch (error) {
+          setErrorConfirmPassword("Yêu cầu thất bại");
+        } finally {
+          setLoading(false);
+        }
       }
     };
+
     run();
   }, [countRegister]);
 

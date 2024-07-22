@@ -18,22 +18,4 @@ async function callLogout(api) {
   await fetch(api, { method: "POST", credentials: "include" });
 }
 
-function delToken(person) {
-  let error = false;
-  let api;
-  switch (person.toLowerCase()) {
-    case "staff":
-      api = `${process.env.REACT_APP_BE}/staff/logout`;
-      break;
-    case "customer":
-      api = `${process.env.REACT_APP_BE}/customer/logout`;
-      break;
-    default:
-      error = true;
-  }
-  if (!error && api) {
-    callLogout(api);
-  }
-}
-
-export { getCookie, delCookie, delToken };
+export { getCookie, delCookie };

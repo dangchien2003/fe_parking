@@ -6,6 +6,9 @@ import { isPageLogin } from "../../helper/url";
 import { Link } from "react-router-dom";
 import { getCookie } from "../../helper/cookie";
 import { getNowTimestamp } from "../../helper/time";
+import axios from "axios";
+import { getItem } from "../../helper/sessionStorage";
+import Logo from "./logo";
 
 function Header() {
   const [toggle, SetToggle] = useState({ left: 0 });
@@ -16,37 +19,42 @@ function Header() {
   const aRef = useRef();
 
   useEffect(() => {
-    const handleRefreshToken = () => {
+    const handleRefreshToken = async () => {
       const timeEndToken = getCookie("ETok");
       if (!timeEndToken || isNaN(timeEndToken)) {
         return;
       }
       const TimeRemaining = timeEndToken - getNowTimestamp();
       if (TimeRemaining < 60 * 1000 && TimeRemaining > 0) {
-        fetch(`${process.env.REACT_APP_BE}/customer/refresh/tok`, {
-          method: "GET",
-          credentials: "include",
-        })
-          .then((response) => response.json())
-          .then((dataRes) => {
-            if (!dataRes.status === 200) {
-              throw new Error("Success is false");
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BE}/api/customer/refresh/tok`,
+            {
+              withCredentials: true,
+              headers: {
+                Authorization: getItem("CToken"),
+              },
             }
-            // client set cookie
-            if (dataRes.cookies) {
-              for (var key in dataRes.cookies) {
-                if (!dataRes.cookies[key]) {
-                  continue;
+          );
+
+          if (response.status !== 200) {
+            throw new Error("Success is false");
+          }
+
+          // client set cookie
+          if (response.data.cookies) {
+            for (const key in response.data.cookies) {
+              if (response.data.cookies[key]) {
+                const value = response.data.cookies[key].split("->MA");
+                if (value.length >= 2 && !isNaN(value[1])) {
+                  document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
                 }
-                const value = dataRes.cookies[key].split("->MA");
-                if (value.length < 2 || isNaN(value[1])) {
-                  continue;
-                }
-                document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
               }
             }
-          })
-          .catch((error) => console.log(error));
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
 
@@ -105,28 +113,16 @@ function Header() {
   return (
     <header>
       <div className="bg-header">
-        <a
-          href={`/`}
+        <Link
+          to={`/`}
           className="text-decoration-none"
           ref={aRef}
           style={{
             margin: "auto 0px",
           }}
         >
-          <div>
-            <img src={`/img/logo.png`} className="size-logo" alt="logo" />
-            <span
-              className="logo-text text-white hide"
-              style={
-                hideText
-                  ? { animation: "resize-logo 1s ease", fontSize: "18px" }
-                  : {}
-              }
-            >
-              arking
-            </span>
-          </div>
-        </a>
+          <Logo hideText={hideText} />
+        </Link>
         <div className="nav-bar">
           <nav>
             <div

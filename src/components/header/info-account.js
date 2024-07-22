@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
 import { callRemaining } from "../../helper/remaing";
+import { setItem } from "../../helper/sessionStorage";
 function InfoAccount({ onLoad }) {
   const [remaining, setRemaining] = useState(0);
 
@@ -19,7 +20,7 @@ function InfoAccount({ onLoad }) {
   }, []);
 
   const handleLogout = () => {
-    document.cookie = "logout=true;Max-Age=10;path=/";
+    setItem("Ctoken", "", 0);
   };
   return (
     <div className="info-account">

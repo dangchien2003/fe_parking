@@ -3,6 +3,8 @@ import Header from "../components/header/header";
 import { formatMoney } from "../helper/number";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { randomString } from "../helper/random";
+import axios from "axios";
+import { getItem } from "../helper/sessionStorage";
 
 function AddCash() {
   const [denominationsStr, setDenominationsStr] = useState("");
@@ -41,21 +43,27 @@ function AddCash() {
       window.toastError("Mệnh giá nạp phải trên 10.000đ");
       return;
     }
+
     setLoading(true);
-    fetch(`${process.env.REACT_APP_BE}/customer/cash/input-money`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        money: denominationsNum,
-        stringCode: contentQr,
-      }),
-    })
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (dataRes.status !== 201) {
+
+    axios
+      .post(
+        `${process.env.REACT_APP_BE}/api/customer/cash/input-money`,
+        {
+          money: denominationsNum,
+          stringCode: contentQr,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getItem("CToken"),
+          },
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        const dataRes = response.data;
+        if (response.status !== 201) {
           if (dataRes.message) {
             window.toastError(dataRes.message);
             return;

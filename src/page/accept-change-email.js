@@ -2,24 +2,28 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { acceptChangeEmail } from "../helper/convert-error";
+import axios from "axios";
 
 function AcceptChangeEmail() {
   const { token } = useParams();
   const [loaded, setLoaded] = useState(false);
   const [message, setMessage] = useState("");
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BE}/customer/accept-change-email`, {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        tokenChange: token,
-      }),
-    })
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (!dataRes.status === 200) {
+    axios
+      .patch(
+        `${process.env.REACT_APP_BE}/api/customer/accept-change-email`,
+        {
+          tokenChange: token,
+        },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const dataRes = response.data;
+        if (dataRes.status !== 200) {
           let message =
             acceptChangeEmail[dataRes.message] || "Lỗi không xác định";
           setMessage(message);

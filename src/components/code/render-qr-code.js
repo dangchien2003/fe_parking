@@ -3,6 +3,8 @@ import { renderNewQr } from "../../helper/canvas";
 import { useEffect, useState } from "react";
 import { LoadingCircle } from "../loading/loading-circle";
 import { getContentQr } from "../../helper/convert-error";
+import { getItem } from "../../helper/sessionStorage";
+import axios from "axios";
 
 function RenderQr({ qrid }) {
   const [loaded, setLoaded] = useState(false);
@@ -10,28 +12,34 @@ function RenderQr({ qrid }) {
   const [downloaded, setDownloaded] = useState(false);
   const [content, setContent] = useState("");
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BE}/customer/code/qr/${qrid}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (dataRes.status === 200) {
-          setContent(dataRes.data);
-          return;
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BE}/api/customer/code/qr/${qrid}`,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: getItem("CToken"),
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setContent(response.data.data);
+        } else {
+          let message =
+            getContentQr[response.data.message] || "Lỗi không xác định";
+          throw new Error(message);
         }
-
-        let message = getContentQr[dataRes.message] || "Lỗi không xác định";
-
-        throw new Error(message);
-      })
-      .catch((err) => {
+      } catch (error) {
         setErrorQr(true);
-        window.toastError(err);
-      })
-      .finally(() => {
+        window.toastError(error.message);
+      } finally {
         setLoaded(true);
-      });
+      }
+    };
+
+    fetchContent();
   }, []);
 
   const handleDownloadQr = () => {

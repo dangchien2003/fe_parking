@@ -2,24 +2,28 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { acceptAccount } from "../helper/convert-error";
+import axios from "axios";
 
 function AcceptAccount() {
   const { token } = useParams();
   const [loaded, setLoaded] = useState(false);
   const [message, setMessage] = useState("");
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BE}/customer/accept-account`, {
-      method: "PATCH",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        token: token,
-      }),
-    })
-      .then((response) => response.json())
-      .then((dataRes) => {
-        if (!dataRes.status === 200) {
+    axios
+      .patch(
+        `${process.env.REACT_APP_BE}/api/customer/accept-account`,
+        {
+          token: token,
+        },
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const dataRes = response.data;
+        if (dataRes.status !== 200) {
           let message = acceptAccount[dataRes.message] || "Lỗi không xác định";
           setMessage(message);
         }
