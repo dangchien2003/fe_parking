@@ -3,6 +3,7 @@ import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { getParameterByName } from "../helper/url";
 import axios from "axios";
+import api from "../config/axiosConfig";
 function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
@@ -30,20 +31,10 @@ function ForgetPassword() {
     const run = async () => {
       if (count > 0 && !errorEmail) {
         setLoading(true);
-        let host = process.env.REACT_APP_BE;
-
         try {
-          const response = await axios.post(
-            `${host}/api/customer/forget`,
-            {
-              email: email,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const response = await api.post("/customer/forget", {
+            email: email,
+          });
 
           setLoading(false);
 

@@ -2,8 +2,7 @@ import { useState } from "react";
 import { getNowTimestamp, convertTimeStamp } from "../../helper/time";
 import { cancleCode, extendCodeError } from "../../helper/convert-error";
 import { formatMoney } from "../../helper/number";
-import { getItem } from "../../helper/sessionStorage";
-import axios from "axios";
+import api from "../../config/axiosConfig";
 const today = () => {
   const now = getNowTimestamp();
   return convertTimeStamp(now, "yyyy-MM-DD");
@@ -28,19 +27,11 @@ function ActionCode({ info, onCancleOk }) {
     setCalling(true);
     setMessage("");
     try {
-      const response = await axios.patch(
-        `${process.env.REACT_APP_BE}/api/customer/code/cancle`,
-        null,
-        {
-          params: {
-            id: info.qrid,
-          },
-          withCredentials: true,
-          headers: {
-            Authorization: getItem("CToken"),
-          },
-        }
-      );
+      const response = await api.patch("/customer/code/cancle", null, {
+        params: {
+          id: info.qrid,
+        },
+      });
 
       if (response.status === 200) {
         window.toastSuccess("Huỷ thành công");
@@ -85,16 +76,12 @@ function ActionCode({ info, onCancleOk }) {
     handleClearData();
     setCallingExtend(true);
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BE}/api/customer/code/extend/price/${info.qrid}`,
+      const response = await api.get(
+        "/customer/code/extend/price/${info.qrid}",
         {
           params: {
             date: date,
             time: valueSelectTime,
-          },
-          withCredentials: true,
-          headers: {
-            Authorization: getItem("CToken"),
           },
         }
       );
@@ -124,15 +111,14 @@ function ActionCode({ info, onCancleOk }) {
     setMessage("");
 
     try {
-      const response = await axios.patch(
-        `${process.env.REACT_APP_BE}/api/customer/code/extend/${info.qrid}`,
+      const response = await api.patch(
+        `/customer/code/extend/${info.qrid}`,
         null,
         {
           params: {
             date: date,
             time: valueSelectTime,
           },
-          withCredentials: true,
         }
       );
 

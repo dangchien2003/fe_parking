@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { login } from "../helper/convert-error";
-import { setItem } from "../helper/sessionStorage";
+import { setSession } from "../helper/sessionStorage";
+import api from "../config/axiosConfig";
+import { setNextRefresh } from "../helper/token";
 
 function Login() {
   const [email, setEmail] = useState("chienboy03@gmail.com");
@@ -18,8 +20,9 @@ function Login() {
   const [heightPage, setHeightPage] = useState(window.innerHeight);
   const [heightForm, setHeightForm] = useState(0);
   const [typePasword, setTypePasword] = useState("password");
+  const navigate = useNavigate();
+
   const clientId = process.env.REACT_APP_CLIENTID;
-  const host = process.env.REACT_APP_BE;
 
   useEffect(() => {
     setHeightForm(document.getElementById("form").offsetHeight);
@@ -39,60 +42,40 @@ function Login() {
     const run = async () => {
       if (countLogin > 0 && !errorEmail && !errorPassword) {
         setLoading(true);
-
-        fetch(`${host}/api/customer/login`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        try {
+          const response = await api.post("/customer/login", {
             email: email,
             password: password,
             memorize: remember,
-          }),
-        })
-          .then((response) => {
-            setLoading(false);
-            return response.json();
-          })
-          .then((data) => {
-            if (data.status !== 200) {
-              let message = login[data.message] || "Lỗi không xác định";
-              setErrorPassword(message);
-              return;
-            }
-
-            // client set cookie
-            handleLoginOK(data);
-          })
-          .catch(() => {
-            setErrorPassword("Yêu cầu thất bại");
-          })
-          .finally(() => {
-            setLoading(false);
           });
+
+          const data = response.data;
+
+          if (response.status !== 200) {
+            let message = login[data.message] || "Lỗi không xác định";
+            setErrorPassword(message);
+            return;
+          }
+
+          handleLoginOK(data);
+        } catch (error) {
+          console.log(error);
+          setErrorPassword("Yêu cầu thất bại");
+        } finally {
+          setLoading(false);
+        }
       }
     };
+
     run();
   }, [countLogin]);
 
   const handleLoginOK = (response) => {
     const token = response.data.access_token;
-    const type = response.data.token_type;
     const age = parseInt(response.data.expires_in, 10);
-    setItem("CToken", `${type} ${token}`, age);
-    for (var key in response.cookies) {
-      if (!response.cookies[key]) {
-        continue;
-      }
-      const value = response.cookies[key].split("->MA");
-      if (value.length < 2 || isNaN(value[1])) {
-        continue;
-      }
-      document.cookie = `${key}=${value[0]}; path=/; max-age=${value[1]}`;
-    }
-    window.location.href = "/";
+    setSession("CToken", token, age);
+    setNextRefresh(age);
+    navigate("/");
   };
 
   const handleLogin = () => {
@@ -139,8 +122,8 @@ function Login() {
 
   const onLoginSuccess = (credentialResponse) => {
     const token = credentialResponse.credential;
-    axios
-      .post(`${host}/api/customer/login/google`, { googleToken: token })
+    api
+      .post("/customer/login/google", { googleToken: token })
       .then((response) => {
         if (response.status !== 200) {
           let message = login[response.message] || "Lỗi không xác định";
@@ -152,17 +135,9 @@ function Login() {
         setErrorPassword("Có lỗi xảy ra");
       });
   };
-  const onLoginError = (e) => {
-    console.log(e);
-  };
 
-  const click = (e) => {
-    console.log("object");
-    document.querySelectorAll(".g-signin2").forEach((element) => {
-      element.addEventListener("click", () => {
-        console.log("GoogleLogin button clicked.");
-      });
-    });
+  const onLoginError = (e) => {
+    window.toastError("Không thể đăng nhập");
   };
 
   const margin = Math.floor(heightPage / 2 - heightForm / 2 - 100);
@@ -258,7 +233,6 @@ function Login() {
             onClick={login}
           >
             <GoogleLogin
-              onChange={click}
               onSuccess={onLoginSuccess}
               onError={onLoginError}
               clientId={clientId}

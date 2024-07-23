@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import axios from "axios";
+import api from "../config/axiosConfig";
 
 const regexPasswords =
   /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
@@ -44,21 +45,11 @@ function Register() {
         !errorConfirmPassword
       ) {
         setLoading(true);
-        let host = process.env.REACT_APP_BE;
-
         try {
-          const response = await axios.post(
-            `${host}/api/customer/register`,
-            {
-              email: email,
-              password: password,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const response = await api.post("/customer/register", {
+            email: email,
+            password: password,
+          });
 
           const data = response.data;
 

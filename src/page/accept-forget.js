@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { acceptForget } from "../helper/convert-error";
-import axios from "axios";
+import api from "../config/axiosConfig";
 function AcceptForget() {
   const { token } = useParams();
   const [loading, setLoading] = useState(false);
@@ -28,8 +28,8 @@ function AcceptForget() {
   useEffect(() => {
     setLoading(true);
 
-    axios
-      .get(`${process.env.REACT_APP_BE}/api/customer/forget/${token}`)
+    api
+      .get(`/customer/forget/${token}`)
       .then((response) => {
         setLoading(false);
         const dataRes = response.data;

@@ -2,25 +2,17 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { acceptChangeEmail } from "../helper/convert-error";
-import axios from "axios";
+import api from "../config/axiosConfig";
 
 function AcceptChangeEmail() {
   const { token } = useParams();
   const [loaded, setLoaded] = useState(false);
   const [message, setMessage] = useState("");
   useEffect(() => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_BE}/api/customer/accept-change-email`,
-        {
-          tokenChange: token,
-        },
-        {
-          headers: {
-            "Content-type": "application/json",
-          },
-        }
-      )
+    api
+      .patch("/customer/accept-change-email", {
+        tokenChange: token,
+      })
       .then((response) => {
         const dataRes = response.data;
         if (dataRes.status !== 200) {

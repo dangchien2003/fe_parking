@@ -1,14 +1,12 @@
 import { useState } from "react";
+import api from "../config/axiosConfig";
 
 function Controller() {
   const [message, setMessage] = useState("");
   const loadApi = async (url) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BE}/${url}`, {
-        method: "GET",
-      });
-      const data = await response.json();
-      setMessage(JSON.stringify(data));
+      const response = await api.get(`/${url}`);
+      setMessage(JSON.stringify(response));
     } catch (err) {
       setMessage(err.toString());
     }

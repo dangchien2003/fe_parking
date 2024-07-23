@@ -52,26 +52,27 @@ const changeEmail = {
 };
 
 const acceptChangeEmail = {
-  "Invalid token": "Yêu cầu không hợp lệ",
+  "Invalid change token": "Yêu cầu không hợp lệ",
   "Account not exist": "Tài khoản không xác định",
   "Session has ended": "Yêu cầu hết hạn",
   "Email already exist": "Tài khoản đã tồn tại",
 };
 
 const acceptAccount = {
-  "Invalid token": "Yêu cầu không hợp lệ",
+  "Invalid accept token": "Yêu cầu không hợp lệ",
   "Account not exist": "Tài khoản không xác định",
   "Account accepted": "Tài khoản đang hoạt động",
 };
 
 const acceptForget = {
-  "Invalid token": "Yêu cầu không hợp lệ",
+  "Invalid change token": "Yêu cầu không hợp lệ",
   "Invalid email": "Sai địa chỉ email",
   "Email not exist": "Tài khoản không xác định",
   "Token has expired": "Yêu cầu hết hạn",
 };
 
 const login = {
+  "Invalid google token": "Đăng nhập thất bại",
   "Email cannot be empty": "Email không đúng",
   "Invalid email": "Email không đúng",
   "Password cannot be empty": "Nhập password",

@@ -4,7 +4,8 @@ import { formatMoney } from "../helper/number";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { randomString } from "../helper/random";
 import axios from "axios";
-import { getItem } from "../helper/sessionStorage";
+import { getCustomerAuthorization } from "../helper/authorization";
+import api from "../config/axiosConfig";
 
 function AddCash() {
   const [denominationsStr, setDenominationsStr] = useState("");
@@ -46,21 +47,11 @@ function AddCash() {
 
     setLoading(true);
 
-    axios
-      .post(
-        `${process.env.REACT_APP_BE}/api/customer/cash/input-money`,
-        {
-          money: denominationsNum,
-          stringCode: contentQr,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: getItem("CToken"),
-          },
-          withCredentials: true,
-        }
-      )
+    api
+      .post("/customer/cash/input-money", {
+        money: denominationsNum,
+        stringCode: contentQr,
+      })
       .then((response) => {
         const dataRes = response.data;
         if (response.status !== 201) {

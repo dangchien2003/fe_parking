@@ -1,13 +1,25 @@
 import { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../helper/number";
-import { callRemaining } from "../../helper/remaing";
-import { setItem } from "../../helper/sessionStorage";
+import { setSession } from "../../helper/sessionStorage";
+import api from "../../config/axiosConfig";
 function InfoAccount({ onLoad }) {
   const [remaining, setRemaining] = useState(0);
 
   useEffect(() => {
     const data = async () => {
+      async function callRemaining() {
+        try {
+          const response = await api.get("/customer/cash/remaining");
+          if (response.status === 200) {
+            return response.data.data.remaining;
+          }
+        } catch (error) {
+          console.log(error);
+          return 0;
+        }
+      }
+
       const data = await callRemaining();
       setRemaining(formatMoney(data));
 
@@ -20,7 +32,7 @@ function InfoAccount({ onLoad }) {
   }, []);
 
   const handleLogout = () => {
-    setItem("Ctoken", "", 0);
+    setSession("CToken", "", 0);
   };
   return (
     <div className="info-account">

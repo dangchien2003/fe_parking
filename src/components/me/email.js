@@ -3,7 +3,8 @@ import isEmail from "../../valid/email";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changeEmail } from "../../helper/convert-error";
 import axios from "axios";
-import { getItem } from "../../helper/sessionStorage";
+import { getCustomerAuthorization } from "../../helper/authorization";
+import api from "../../config/axiosConfig";
 
 function Email({ email }) {
   const [change, setChange] = useState(false);
@@ -15,20 +16,10 @@ function Email({ email }) {
 
   useEffect(() => {
     if (checkOk) {
-      axios
-        .post(
-          `${process.env.REACT_APP_BE}/api/customer/change-email`,
-          {
-            newEmail: newEmail,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: getItem("CToken"),
-            },
-          }
-        )
+      api
+        .post("/customer/change-email", {
+          newEmail: newEmail,
+        })
         .then((response) => {
           const dataRes = response.data;
           if (response.status !== 200) {
@@ -65,8 +56,6 @@ function Email({ email }) {
     if (loading === true) {
       return;
     }
-
-    console.log("object");
 
     if (!isEmail(newEmail)) {
       setErrorChangeEmail("Email không đúng");

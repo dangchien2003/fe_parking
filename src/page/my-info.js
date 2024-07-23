@@ -6,8 +6,7 @@ import LoadingLineRun from "../components/loading/loading-line-run";
 import { convertTimeStamp } from "../helper/time";
 import { diffTime, formatDays } from "../helper/time";
 import Email from "../components/me/email";
-import { getItem } from "../helper/sessionStorage";
-import axios from "axios";
+import api from "../config/axiosConfig";
 function MyInfo() {
   const [info, setInfo] = useState(null);
   const [errorFetch, setErrorFetch] = useState("");
@@ -15,13 +14,7 @@ function MyInfo() {
   useEffect(() => {
     const myInfo = async () => {
       try {
-        const host = process.env.REACT_APP_BE;
-        const response = await axios.get(`${host}/api/customer/me`, {
-          headers: {
-            Authorization: getItem("CToken"),
-          },
-          withCredentials: true,
-        });
+        const response = await api.get("/customer/me");
 
         const dataRes = response.data;
         if (response.status !== 200) {

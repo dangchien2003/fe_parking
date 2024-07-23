@@ -14,8 +14,10 @@ import AddCash from "./page/add-cash";
 import HelloWorld from "./page/helloworld";
 import InfoQr from "./page/info-qr";
 import Controller from "./page/controller";
+import RefreshToken from "./components/token/refresh";
 
 function App() {
+  RefreshToken();
   return (
     <div>
       <Routes>

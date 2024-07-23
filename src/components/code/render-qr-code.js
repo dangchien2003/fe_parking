@@ -1,10 +1,10 @@
 import QRCode from "qrcode.react";
-import { renderNewQr } from "../../helper/canvas";
 import { useEffect, useState } from "react";
 import { LoadingCircle } from "../loading/loading-circle";
 import { getContentQr } from "../../helper/convert-error";
-import { getItem } from "../../helper/sessionStorage";
 import axios from "axios";
+import { getCustomerAuthorization } from "../../helper/authorization";
+import api from "../../config/axiosConfig";
 
 function RenderQr({ qrid }) {
   const [loaded, setLoaded] = useState(false);
@@ -14,15 +14,7 @@ function RenderQr({ qrid }) {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BE}/api/customer/code/qr/${qrid}`,
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: getItem("CToken"),
-            },
-          }
-        );
+        const response = await api.get("/customer/code/qr/${qrid}");
 
         if (response.status === 200) {
           setContent(response.data.data);

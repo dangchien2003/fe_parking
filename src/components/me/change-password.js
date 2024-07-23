@@ -7,8 +7,9 @@ import {
 } from "../../helper/password";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changePassword } from "../../helper/convert-error";
-import { getItem } from "../../helper/sessionStorage";
 import axios from "axios";
+import { getCustomerAuthorization } from "../../helper/authorization";
+import api from "../../config/axiosConfig";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -25,21 +26,11 @@ function ChangePassword() {
   useEffect(() => {
     const callApiChangePassword = async () => {
       try {
-        const response = await axios.patch(
-          `${process.env.REACT_APP_BE}/api/customer/change-password`,
-          {
-            oldPassword,
-            newPassword,
-            confirmPassword: acceptPassword,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: getItem("CToken"),
-            },
-          }
-        );
+        const response = await api.patch("/customer/change-password", {
+          oldPassword,
+          newPassword,
+          confirmPassword: acceptPassword,
+        });
 
         const dataRes = response.data;
 

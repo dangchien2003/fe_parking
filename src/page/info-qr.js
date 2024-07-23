@@ -6,9 +6,9 @@ import { formatMoney } from "../helper/number";
 import { convertTimeStamp, getNowTimestamp } from "../helper/time";
 import RenderQr from "../components/code/render-qr-code";
 import ActionCode from "../components/code/action-code";
-import RenderAddress from "../components/code/address-bot";
 import axios from "axios";
-import { getItem } from "../helper/sessionStorage";
+import { getCustomerAuthorization } from "../helper/authorization";
+import api from "../config/axiosConfig";
 
 function InfoQr() {
   const { qrid } = useParams();
@@ -20,20 +20,12 @@ function InfoQr() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BE}/api/customer/code/i`,
-          {
-            params: { qrid },
-            withCredentials: true,
-            headers: {
-              Authorization: getItem("CToken"),
-            },
-          }
-        );
+        const response = await api.get("/customer/code/i", {
+          params: { qrid },
+        });
 
         if (response.status === 200) {
           setInfo(response.data.data);
-          console.log(response.data.data);
         } else {
           window.toastError("Có lỗi xảy ra");
         }

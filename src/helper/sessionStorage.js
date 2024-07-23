@@ -3,7 +3,7 @@ function getExpiry(seconds) {
   return Math.floor(now.getTime() / 1000) + seconds;
 }
 
-function setItem(key, value, ttlInSeconds) {
+function setSession(key, value, ttlInSeconds) {
   const item = {
     value: value,
     expiry: getExpiry(ttlInSeconds),
@@ -12,7 +12,7 @@ function setItem(key, value, ttlInSeconds) {
   sessionStorage.setItem(key, JSON.stringify(item));
 }
 
-function getItem(key) {
+function getSession(key) {
   const itemStr = sessionStorage.getItem(key);
 
   if (!itemStr) {
@@ -29,4 +29,8 @@ function getItem(key) {
   return item.value;
 }
 
-export { setItem, getItem };
+function removeSession(key) {
+  sessionStorage.removeItem(key);
+}
+
+export { setSession, getSession, removeSession };

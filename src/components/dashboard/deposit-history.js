@@ -3,7 +3,8 @@ import { formatMoney } from "../../helper/number";
 import RenderReposit from "./render-list-deposit";
 import LoadingLineRun from "../loading/loading-line-run";
 import axios from "axios";
-import { getItem } from "../../helper/sessionStorage";
+import { getCustomerAuthorization } from "../../helper/authorization";
+import api from "../../config/axiosConfig";
 function HistoryDeposit() {
   const [history, setHistory] = useState([]);
   const [loaded, setLoading] = useState(false);
@@ -11,15 +12,7 @@ function HistoryDeposit() {
   useEffect(() => {
     const callHistory = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BE}/api/customer/cash/all`,
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: getItem("CToken"),
-            },
-          }
-        );
+        const response = await api.get("/customer/cash/all");
 
         if (response.status === 200) {
           setHistory(response.data.data);

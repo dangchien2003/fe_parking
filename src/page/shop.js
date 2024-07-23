@@ -5,7 +5,8 @@ import LoadingShop from "../components/loading/loading-shop";
 import { formatSeconds } from "../helper/time";
 import { buyCode } from "../helper/convert-error";
 import axios from "axios";
-import { getItem } from "../helper/sessionStorage";
+import { getCustomerAuthorization } from "../helper/authorization";
+import api from "../config/axiosConfig";
 
 function Shop() {
   const [shop, setShop] = useState([]);
@@ -21,17 +22,7 @@ function Shop() {
       }
       window.toastInfo("Đang tiến hành mua");
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_BE}/api/customer/code/buy`,
-          { qrCategory },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: getItem("CToken"),
-            },
-          }
-        );
+        const response = await api.post("/customer/code/buy", { qrCategory });
 
         if (response.status === 201) {
           window.toastSuccess("Mua vé thành công");
@@ -84,9 +75,7 @@ function Shop() {
     };
     const getShop = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BE}/api/customer/shop-qr/all`
-        );
+        const response = await api.get("/customer/shop-qr/all");
 
         if (response.status === 200) {
           renderShop(response.data.data);
