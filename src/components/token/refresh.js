@@ -15,7 +15,7 @@ function RefreshToken() {
     console.log("next:", nextRefesh);
     if (
       nextRefesh &&
-      new Date().getTime() > parseInt(nextRefesh) - 2 * 60 * 1000 &&
+      new Date().getTime() > parseInt(nextRefesh, 10) - 2 * 60 * 1000 &&
       !patchNoCall.includes(window.location.pathname)
     ) {
       console.log("fetch");
