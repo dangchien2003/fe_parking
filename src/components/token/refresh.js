@@ -8,13 +8,17 @@ import { setNextRefresh } from "../../helper/token";
 const patchNoCall = ["/login"];
 
 function RefreshToken() {
+  console.log("start refresh");
   const refresh = async () => {
+    console.log("in refresh");
     const nextRefesh = getCookie(key.refesh_token);
+    console.log("next:", nextRefesh);
     if (
       nextRefesh &&
       new Date().getTime() > parseInt(nextRefesh) - 2 * 60 * 1000 &&
       !patchNoCall.includes(window.location.pathname)
     ) {
+      console.log("fetch");
       try {
         const response = await api.get("/customer/refresh");
         if (response.status === 200) {
