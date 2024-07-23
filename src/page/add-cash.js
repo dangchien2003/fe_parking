@@ -3,8 +3,6 @@ import Header from "../components/header/header";
 import { formatMoney } from "../helper/number";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { randomString } from "../helper/random";
-import axios from "axios";
-import { getCustomerAuthorization } from "../helper/authorization";
 import api from "../config/axiosConfig";
 
 function AddCash() {

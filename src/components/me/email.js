@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import isEmail from "../../valid/email";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changeEmail } from "../../helper/convert-error";
-import axios from "axios";
-import { getCustomerAuthorization } from "../../helper/authorization";
 import api from "../../config/axiosConfig";
 
 function Email({ email }) {

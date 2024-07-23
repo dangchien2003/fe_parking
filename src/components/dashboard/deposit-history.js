@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { formatMoney } from "../../helper/number";
 import RenderReposit from "./render-list-deposit";
 import LoadingLineRun from "../loading/loading-line-run";
-import axios from "axios";
-import { getCustomerAuthorization } from "../../helper/authorization";
 import api from "../../config/axiosConfig";
 function HistoryDeposit() {
   const [history, setHistory] = useState([]);

@@ -4,8 +4,6 @@ import { formatMoney } from "../helper/number";
 import LoadingShop from "../components/loading/loading-shop";
 import { formatSeconds } from "../helper/time";
 import { buyCode } from "../helper/convert-error";
-import axios from "axios";
-import { getCustomerAuthorization } from "../helper/authorization";
 import api from "../config/axiosConfig";
 
 function Shop() {

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { getParameterByName } from "../helper/url";
-import axios from "axios";
 import api from "../config/axiosConfig";
 function ForgetPassword() {
   const [email, setEmail] = useState("");

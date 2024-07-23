@@ -7,8 +7,6 @@ import {
 } from "../../helper/password";
 import { LoadingCircle } from "../loading/loading-circle";
 import { changePassword } from "../../helper/convert-error";
-import axios from "axios";
-import { getCustomerAuthorization } from "../../helper/authorization";
 import api from "../../config/axiosConfig";
 
 function ChangePassword() {

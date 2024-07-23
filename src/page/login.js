@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import isEmail from "../valid/email";
 import { LoadingCircle } from "../components/loading/loading-circle";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { login } from "../helper/convert-error";
 import { setSession } from "../helper/sessionStorage";
 import api from "../config/axiosConfig";

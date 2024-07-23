@@ -6,8 +6,6 @@ import { formatMoney } from "../helper/number";
 import { convertTimeStamp, getNowTimestamp } from "../helper/time";
 import RenderQr from "../components/code/render-qr-code";
 import ActionCode from "../components/code/action-code";
-import axios from "axios";
-import { getCustomerAuthorization } from "../helper/authorization";
 import api from "../config/axiosConfig";
 
 function InfoQr() {

@@ -3,8 +3,6 @@ import { formatMoney } from "../../helper/number";
 import RenderListBougthQr from "./render-list-bougth-qr";
 import LoadingLineRun from "../loading/loading-line-run";
 import { getNowTimestamp } from "../../helper/time";
-import axios from "axios";
-import { getCustomerAuthorization } from "../../helper/authorization";
 import api from "../../config/axiosConfig";
 
 function HistoryBuyCode() {

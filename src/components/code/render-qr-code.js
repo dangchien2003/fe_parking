@@ -2,8 +2,6 @@ import QRCode from "qrcode.react";
 import { useEffect, useState } from "react";
 import { LoadingCircle } from "../loading/loading-circle";
 import { getContentQr } from "../../helper/convert-error";
-import axios from "axios";
-import { getCustomerAuthorization } from "../../helper/authorization";
 import api from "../../config/axiosConfig";
 
 function RenderQr({ qrid }) {
