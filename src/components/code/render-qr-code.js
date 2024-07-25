@@ -12,7 +12,7 @@ function RenderQr({ qrid }) {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await api.get("/customer/code/qr/${qrid}");
+        const response = await api.get(`/customer/code/qr/${qrid}`);
 
         if (response.status === 200) {
           setContent(response.data.data);
