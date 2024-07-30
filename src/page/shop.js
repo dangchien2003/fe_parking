@@ -73,7 +73,7 @@ function Shop() {
     };
     const getShop = async () => {
       try {
-        const response = await api.get("/customer/shop-qr/all");
+        const response = await api.get("/public/shop-qr/all");
 
         if (response.status === 200) {
           renderShop(response.data.data);
